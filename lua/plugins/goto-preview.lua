@@ -1,7 +1,11 @@
 return {
   "rmagatti/goto-preview",
   keys = {
-    { "<leader>cp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>" },
+    {
+      "gp",
+      "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
+      desc = "Goto Preview Definition",
+    },
   },
   config = function()
     require("goto-preview").setup({})
