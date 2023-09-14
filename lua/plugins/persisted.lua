@@ -2,10 +2,11 @@ return {
   "olimorris/persisted.nvim",
   event = "VimEnter",
   keys = {
-    { "<leader>qt", "<CMD>Telescope persisted<CR>", desc = "View Sessions" },
-    { "<leader>qs", "<CMD>SessionLoad<CR>", desc = "Load Session" },
-    { "<leader>ql", "<CMD>SessionLoadLast<CR>", desc = "Load Last Session" },
-    { "<leader>qd", "<CMD>SessionStop<CR>", desc = "Stop Record Current Session" },
+    { "<leader>qv", "<CMD>Telescope persisted<CR>", desc = "View Sessions" },
+    { "<leader>ql", "<CMD>SessionLoad<CR>", desc = "Load Session" },
+    { "<leader>qL", "<CMD>SessionLoadLast<CR>", desc = "Load Last Session" },
+    { "<leader>qs", "<CMD>SessionStart<CR>", desc = "Stop Record Current Session" },
+    { "<leader>qt", "<CMD>SessionStop<CR>", desc = "Stop Record Current Session" },
   },
   config = function()
     require("persisted").setup({

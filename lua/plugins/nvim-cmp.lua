@@ -79,5 +79,9 @@ return {
         end
       end, { "i", "s" }),
     })
+
+    -- 在选择一个函数或者方法时，自动补充括号
+    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
   end,
 }
