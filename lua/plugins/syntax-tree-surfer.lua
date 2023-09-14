@@ -9,8 +9,8 @@ return {
       mode = { "x" },
     },
     {
-      "<cmd>STSSelectPrevSiblingNode<cr>",
       "K",
+      "<cmd>STSSelectPrevSiblingNode<cr>",
       desc = "select prev sibling node",
       mode = { "x" },
     },
