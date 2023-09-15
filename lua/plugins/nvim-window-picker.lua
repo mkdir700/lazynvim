@@ -6,8 +6,20 @@ return {
     {
       "<leader>wp",
       function()
-        require("window-picker").pick_window()
+        local picker = require("window-picker")
+        local picked_window_id = picker.pick_window() or vim.api.nvim_get_current_win()
+        vim.api.nvim_set_current_win(picked_window_id)
       end,
+      desc = "Pick Window",
+    },
+    {
+      "<M-w>",
+      function()
+        local picker = require("window-picker")
+        local picked_window_id = picker.pick_window() or vim.api.nvim_get_current_win()
+        vim.api.nvim_set_current_win(picked_window_id)
+      end,
+      mode = { "n", "t" },
       desc = "Pick Window",
     },
   },
