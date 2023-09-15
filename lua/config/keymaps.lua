@@ -58,3 +58,6 @@ if pcall(require, "nvim-treesitter.textobjects.repeatable_move") then
   -- vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
   -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
 end
+
+-- plugins: lsp
+map("n", "<leader>ar", ":LspRestart<cr>", { desc = "Restart LSP" })
