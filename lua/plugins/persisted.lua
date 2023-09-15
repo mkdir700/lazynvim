@@ -5,7 +5,7 @@ return {
     { "<leader>qv", "<CMD>Telescope persisted<CR>", desc = "View Sessions" },
     { "<leader>ql", "<CMD>SessionLoad<CR>", desc = "Load Session" },
     { "<leader>qL", "<CMD>SessionLoadLast<CR>", desc = "Load Last Session" },
-    { "<leader>qs", "<CMD>SessionStart<CR>", desc = "Stop Record Current Session" },
+    { "<leader>qs", "<CMD>SessionStart<CR>", desc = "Start Record Current Session" },
     { "<leader>qt", "<CMD>SessionStop<CR>", desc = "Stop Record Current Session" },
   },
   config = function()
