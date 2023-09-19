@@ -9,3 +9,5 @@ vim.wo.foldminlines = 1
 vim.wo.foldnestmax = 10
 vim.wo.foldtext =
   [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
+
+vim.o.sessionoptions = "buffers,curdir,folds,globals,tabpages,winpos,winsize"
