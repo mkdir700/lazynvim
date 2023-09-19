@@ -3,6 +3,7 @@ return {
   opts = {
     defaults = {
       ["<leader>a"] = { name = "application" },
+      ["m"] = { name = "bookmarks" }
     }
   }
 }
