@@ -12,6 +12,7 @@ return {
       end,
       open_mapping = [[<c-\>]],
       autochdir = true,
+      auto_scroll = false,
     })
 
     -- Set terminal keymaps
