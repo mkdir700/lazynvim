@@ -1,5 +1,7 @@
 return {
   "nvim-treesitter/nvim-treesitter",
+  build = ":TSUpdate",
+  event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     {
       "kana/vim-textobj-user",
