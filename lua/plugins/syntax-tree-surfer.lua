@@ -3,25 +3,25 @@ return {
   event = "BufRead",
   keys = {
     {
-      "J",
+      "<C-j>",
       "<cmd>STSSelectNextSiblingNode<cr>",
       desc = "select next sibling node",
       mode = { "x" },
     },
     {
-      "K",
+      "<C-k>",
       "<cmd>STSSelectPrevSiblingNode<cr>",
       desc = "select prev sibling node",
       mode = { "x" },
     },
     {
-      "P",
+      "<C-p>",
       "<cmd>STSSelectParentNode<cr>",
       desc = "select parent node",
       mode = { "x" },
     },
     {
-      "N",
+      "<C-n>",
       "<cmd>STSSelectChildNode<cr>",
       desc = "select child node",
       mode = { "x" },
