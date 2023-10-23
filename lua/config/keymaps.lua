@@ -33,7 +33,7 @@ map("n", "<", "<<")
 
 map("x", "L", "$")
 map("x", "H", "$")
-map("v", "p", "P")
+map("x", "p", "P")
 
 -- plugins: dial.nvim
 -- 判断 dial.nvim 插件是否安装
@@ -48,7 +48,7 @@ end
 
 -- plugins: nvim-treesitter
 if pcall(require, "nvim-treesitter.textobjects.repeatable_move") then
-  local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
+  local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
   -- Repeat movement with ; and ,
   -- ensure ; goes forward and , goes backward regardless of the last direction
   vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
