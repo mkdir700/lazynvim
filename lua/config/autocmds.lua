@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd({ "User" }, {
   group = group,
   callback = function()
     -- change working directory to root of project
-    local root_dir = Util.get_root()
+    local root_dir = Util.root.get()
     vim.api.nvim_command("cd " .. root_dir)
   end,
 })
