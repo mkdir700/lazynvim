@@ -15,8 +15,31 @@ return {
   "nvim-pack/nvim-spectre",
   cmd = "Spectre",
   opts = { open_cmd = "noswapfile vnew" },
-  -- stylua: ignore
   keys = {
-    { "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
+    {
+      "<leader>sr",
+      function()
+        require("spectre").open_file_search({ select_word = true })
+      end,
+      desc = "Search on current file",
+    },
+    {
+      "<leader>aR",
+      function()
+        require("spectre").open_visual()
+      end,
+      desc = "Search in files",
+    },
   },
+  config = function()
+    require("spectre").setup({
+      mapping = {
+        ["run_current_replace"] = {
+          map = "<C-Enter>",
+          cmd = "<cmd>lua require('spectre.actions').run_current_replace()<CR>",
+          desc = "replace current line",
+        },
+      },
+    })
+  end,
 }
