@@ -29,6 +29,12 @@ vim.api.nvim_create_autocmd({ "User" }, {
     -- change working directory to root of project
     local root_dir = Util.root.get()
     vim.api.nvim_command("cd " .. root_dir)
+
+    -- set the virtualenv from cache if pyproject.toml is present in root dir.
+    local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
+    if venv ~= "" then
+      require("venv-selector").retrieve_from_cache()
+    end
   end,
 })
 
