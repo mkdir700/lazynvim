@@ -8,6 +8,7 @@ return {
       enabled = true,
       auto_trigger = true,
       keymap = {
+        -- accept = "<C-f>",
         accept_word = "<M-y>",
       },
     },
