@@ -27,10 +27,6 @@ map("i", "<C-e>", "<Esc>A")
 -- 退出编辑器
 map("n", "Q", "<cmd>qa<cr>", { desc = "Quit all" })
 
--- 缩进
-map("n", ">", ">>")
-map("n", "<", "<<")
-
 map("x", "L", "$")
 map("x", "H", "$")
 map("x", "p", "P")
