@@ -33,13 +33,13 @@ return {
   },
   config = function()
     require("spectre").setup({
-      mapping = {
-        ["run_current_replace"] = {
-          map = "<C-Enter>",
-          cmd = "<cmd>lua require('spectre.actions').run_current_replace()<CR>",
-          desc = "replace current line",
-        },
-      },
+      -- mapping = {
+      --   ["run_current_replace"] = {
+      --     map = "<C-Enter>",
+      --     cmd = "<cmd>lua require('spectre.actions').run_current_replace()<CR>",
+      --     desc = "replace current line",
+      --   },
+      -- },
     })
   end,
 }
