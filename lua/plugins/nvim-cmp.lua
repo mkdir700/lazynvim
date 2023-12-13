@@ -53,7 +53,9 @@ return {
 
     opts.mapping = vim.tbl_extend("force", opts.mapping, {
       ["<Tab>"] = cmp.mapping(function(fallback)
-        if is_next_char_pair() then
+        if require("copilot.suggestion").is_visible() then
+          require("copilot.suggestion").accept()
+        elseif is_next_char_pair() then
           escape_pair()
         elseif cmp.visible() then
           -- You could replace select_next_item() with confirm({ select = true })
