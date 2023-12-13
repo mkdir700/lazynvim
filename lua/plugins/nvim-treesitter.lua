@@ -22,7 +22,13 @@ return {
       "Julian/vim-textobj-variable-segment",
     },
   },
+  ---@type TSConfig
+  ---@diagnostic disable-next-line: missing-fields
   opts = {
+    indent = {
+      disable = { "python", "yaml" },
+      enable = true,
+    },
     incremental_selection = {
       enable = false,
     },
