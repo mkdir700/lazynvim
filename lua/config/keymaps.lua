@@ -27,23 +27,24 @@ map("i", "<C-e>", "<Esc>A")
 -- 退出编辑器
 map("n", "Q", "<cmd>qa<cr>", { desc = "Quit all" })
 
--- 缩进
-map("n", ">", ">>")
-map("n", "<", "<<")
-
 map("x", "L", "$")
 map("x", "H", "$")
 map("x", "p", "P")
 
+local wk = require("which-key")
+
+-- plugins: lsp
+map("n", "<leader>ar", ":LspRestart<cr>", { desc = "Restart LSP" })
+
 -- plugins: dial.nvim
 -- 判断 dial.nvim 插件是否安装
--- vim.api.nvim_set_keymap("v", "g<C-a>", require("dial.map").inc_gvisual(), { noremap = true })
--- vim.api.nvim_set_keymap("v", "g<C-x>", require("dial.map").dec_gvisual(), { noremap = true })
 if pcall(require, "dial.augend") then
   map("n", "<C-a>", require("dial.map").inc_normal(), { noremap = true })
   map("n", "<C-x>", require("dial.map").dec_normal(), { noremap = true })
   map("v", "<C-a>", require("dial.map").inc_visual(), { noremap = true })
   map("v", "<C-x>", require("dial.map").dec_visual(), { noremap = true })
+  -- vim.api.nvim_set_keymap("v", "g<C-a>", require("dial.map").inc_gvisual(), { noremap = true })
+  -- vim.api.nvim_set_keymap("v", "g<C-x>", require("dial.map").dec_gvisual(), { noremap = true })
 end
 
 -- plugins: nvim-treesitter
@@ -59,5 +60,14 @@ if pcall(require, "nvim-treesitter.textobjects.repeatable_move") then
   -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
 end
 
--- plugins: lsp
-map("n", "<leader>ar", ":LspRestart<cr>", { desc = "Restart LSP" })
+-- plugins: refactoring.nvim
+-- Need to judge whether the refactoring.nvim plug-in is installed
+if pcall(require, "refactoring") then
+  vim.keymap.set("x", "<leader>cre", ":Refactor extract ", { desc = "Extract function" })
+  vim.keymap.set("x", "<leader>crv", ":Refactor extract_var ", { desc = "Extract variable" })
+  vim.keymap.set({ "n", "x" }, "<leader>cR", ":Refactor inline_var", { desc = "Inline variable" })
+  -- vim.keymap.set("n", "<leader>ci", ":Refactor inline_func", { desc = "Inline function" })
+  -- vim.keymap.set("n", "<leader>cb", ":Refactor extract_block", { desc = "Extract block" })
+  -- vim.keymap.set("n", "<leader>cRB", ":Refactor extract_block_to_file")
+  -- vim.keymap.set("x", "<leader>cRf", ":Refactor extract_to_file ")
+end

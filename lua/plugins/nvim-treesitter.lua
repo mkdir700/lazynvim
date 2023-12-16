@@ -22,7 +22,20 @@ return {
       "Julian/vim-textobj-variable-segment",
     },
   },
+  ---@type TSConfig
+  ---@diagnostic disable-next-line: missing-fields
   opts = {
+    highlight = {
+      enable = true,
+      use_languagetree = true,
+      -- https://github.com/nvim-treesitter/nvim-treesitter/issues/1573
+      additional_vim_regex_highlighting = { "python" },
+    },
+    
+    indent = {
+      disable = { "python", "yaml" },
+      enable = true,
+    },
     incremental_selection = {
       enable = false,
     },
