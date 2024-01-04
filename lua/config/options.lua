@@ -11,3 +11,4 @@ vim.wo.foldtext =
   [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
 
 vim.o.sessionoptions = "buffers,curdir,folds,globals,tabpages,winpos,winsize"
+vim.o.swapfile = false
