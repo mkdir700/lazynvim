@@ -7,7 +7,7 @@ return {
       enabled = false,
     },
     trigger_events = {
-      defer_save = { "InsertLeave" },
+      -- defer_save = { "InsertLeave" },
       -- cancel_defered_save = { "TextChanged" },
     },
     debounce_delay = 200,
