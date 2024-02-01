@@ -3,24 +3,22 @@ return {
     "catppuccin/nvim",
     lazy = true,
     name = "catppuccin",
-    opts = {
-      styles = {
-        comments = { "italic" },
-        properties = { "italic" },
-        functions = { "bold" },
-        keywords = { "italic" },
-        operators = { "bold" },
-        conditionals = { "bold" },
-        loops = { "bold" },
-        booleans = { "bold", "italic" },
-        numbers = {},
-        types = {},
-        strings = {},
-        variables = {},
-      },
-    },
     config = function()
       require("catppuccin").setup({
+        styles = {
+          comments = { "bold" },
+          properties = { "italic" },
+          functions = { "bold" },
+          keywords = { "italic" },
+          operators = { "bold" },
+          conditionals = { "italic" },
+          loops = { "italic" },
+          booleans = { "bold", "italic" },
+          numbers = {},
+          types = {},
+          strings = {},
+          variables = {},
+        },
         custom_highlights = function(colors)
           return {
             CmpItemKindSnippet = { fg = C.base, bg = C.mauve },
