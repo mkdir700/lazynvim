@@ -7,7 +7,7 @@ return {
       require("catppuccin").setup({
         styles = {
           comments = { "bold" },
-          properties = { "italic" },
+          properties = { "bold" },
           functions = { "bold" },
           keywords = { "italic" },
           operators = { "bold" },
