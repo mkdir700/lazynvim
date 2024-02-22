@@ -1,6 +1,7 @@
 local disabled_plugins = {
   "echasnovski/mini.surround",
-  "folke/persistence.nvim",
+  -- "folke/persistence.nvim",
+  "olimorris/persisted.nvim",
   "echasnovski/mini.pairs",
 }
 
