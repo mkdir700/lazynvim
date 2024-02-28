@@ -3,6 +3,10 @@ return {
   event = "VeryLazy",
   config = function()
     require("chatgpt").setup({
+      actions_paths = {
+        -- 拼接绝对路径, ./actions.json
+        vim.fn.stdpath("config") .. "/lua/plugins/chatgpt/actions.json",
+      },
       chat = {
         keymaps = {
           close = { "q", "<c-c>" },
@@ -34,6 +38,7 @@ return {
         x = { "<cmd>ChatGPTRun explain_code<CR>", "Explain Code", mode = { "n", "v" } },
         r = { "<cmd>ChatGPTRun roxygen_edit<CR>", "Roxygen Edit", mode = { "n", "v" } },
         l = { "<cmd>ChatGPTRun code_readability_analysis<CR>", "Code Readability Analysis", mode = { "n", "v" } },
+        n = { "<cmd>ChatGPTRun better_variable_names<CR>", "Better Variable Names", mode = { "n", "v" } },
       },
     })
   end,
