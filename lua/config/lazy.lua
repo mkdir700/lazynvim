@@ -24,8 +24,6 @@ require("lazy").setup({
     -- { import = "lazyvim.plugins.extras.ui.edgy" },
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
     { import = "lazyvim.plugins.extras.dap.core" },
-    -- Highlighting for Python
-    { import = "lazyvim.plugins.extras.lang.python-semshi" },
     -- import/override with your plugins
     { import = "plugins" },
   },
