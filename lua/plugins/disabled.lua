@@ -1,7 +1,9 @@
 local disabled_plugins = {
   "echasnovski/mini.surround",
   "echasnovski/mini.pairs",
-  "s1n7ax/nvim-window-picker"
+  "s1n7ax/nvim-window-picker",
+  "sychen52/gF-python-traceback",
+  "b0o/incline.nvim",
 }
 
 local results = {}
