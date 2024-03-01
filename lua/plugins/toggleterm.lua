@@ -51,6 +51,39 @@ return {
         -- 回到刚才来的窗口
         vim.keymap.set({ "t", "n" }, "<C-k>", "<Cmd>wincmd p<CR>", opts)
       end
+
+      -- gF 根据 traceback 跳转到对应文件行号
+      local function traceback_jump()
+        -- {
+        --   argv = { "nvim", "--embed", "+2", "main.py" },
+        --   files = { "/home/xyz/max-hmi-server/main.py" },
+        --   force_block = false,
+        --   guest_cwd = "/home/xyz/max-hmi-server",
+        --   response_pipe = "/run/user/1000/nvim.1421421.0",
+        --   stdin = {}
+        -- }
+        local ok, _ = pcall(require, "flatten")
+        if not ok then
+          vim.notify("flatten.nvim not found", "error")
+          return
+        end
+        local edit_files = require("flatten.core").edit_files
+        local traceback = vim.fn.getline(".")
+        local file, line = traceback:match('File "(.+)", line (%d+)')
+        if file and line then
+          edit_files({
+            files = { file },
+            guest_cwd = vim.fn.fnamemodify(file, ":h"),
+            argv = { "nvim", "--embed", "+" .. line, file },
+            force_block = false,
+            stdin = {},
+            response_pipe = vim.fn.tempname(),
+          })
+        end
+      end
+      vim.keymap.set("n", "gF", function()
+        traceback_jump()
+      end, opts)
     end
 
     vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
