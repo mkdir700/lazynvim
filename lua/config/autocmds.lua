@@ -51,12 +51,14 @@ vim.api.nvim_create_autocmd("VimEnter", {
   once = true,
 })
 vim.api.nvim_create_autocmd("BufReadPre", {
-  desc = "Auto select virtualenv Nvim open",
+  desc = "Auto select virtualenv BufReadPre",
   pattern = "*",
   callback = function()
     -- if VIRTUAL_ENV is set, then don't do anything
     local virtual_env = vim.fn.getenv("VIRTUAL_ENV")
-    if virtual_env then
+    vim.notify(type(virtual_env), "debug")
+    if type(virtual_env) == "string" then
+      vim.notify("VIRTUAL_ENV is set, not doing anything", "debug")
       return
     end
 
