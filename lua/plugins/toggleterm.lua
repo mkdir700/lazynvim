@@ -68,8 +68,24 @@ return {
           return
         end
         local edit_files = require("flatten.core").edit_files
+
+        local function get_file_and_line(text)
+          local file, line
+          file, line = text:match('File "(.+)", line (%d+)')
+          if file and line then
+            return file, line
+          end
+
+          -- /home/xyz/max-hmi-server/tests/templates/rocky/test_flow_rockydual_unloading.py:95: AssertionError
+          file, line = text:match('(.+):(%d+):')
+          if file and line then
+            return file, line
+          end
+          return nil, nil
+        end
+
         local traceback = vim.fn.getline(".")
-        local file, line = traceback:match('File "(.+)", line (%d+)')
+        local file, line = get_file_and_line(traceback)
         if file and line then
           edit_files({
             files = { file },
