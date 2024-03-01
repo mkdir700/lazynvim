@@ -50,3 +50,22 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
   once = true,
 })
+vim.api.nvim_create_autocmd("BufReadPre", {
+  desc = "Auto select virtualenv BufReadPre",
+  pattern = "*",
+  callback = function()
+    -- if VIRTUAL_ENV is set, then don't do anything
+    local virtual_env = vim.fn.getenv("VIRTUAL_ENV")
+    vim.notify(type(virtual_env), "debug")
+    if type(virtual_env) == "string" then
+      vim.notify("VIRTUAL_ENV is set, not doing anything", "debug")
+      return
+    end
+
+    local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
+    if venv ~= "" then
+      require("venv-selector").retrieve_from_cache()
+    end
+  end,
+  once = true,
+})
