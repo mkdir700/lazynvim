@@ -3,6 +3,7 @@ local disabled_plugins = {
   -- "folke/persistence.nvim",
   "olimorris/persisted.nvim",
   "echasnovski/mini.pairs",
+  "s1n7ax/nvim-window-picker"
 }
 
 local results = {}
