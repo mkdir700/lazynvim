@@ -13,10 +13,12 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 
 -- Copy to system clipboard on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
+  pattern = "*",
   callback = function()
-    if vim.v.event.operator == "y" and vim.v.event.regname == "+" then
-      require("osc52").copy_register("+")
-    end
+    require("osc52").copy_register("+")
+    -- if vim.v.event.operator == "y" and vim.v.event.regname == "+" then
+    --   require("osc52").copy_register("+")
+    -- end
   end,
 })
 
