@@ -19,7 +19,7 @@ return {
           strings = {},
           variables = {},
         },
-        custom_highlights = function(colors)
+        custom_highlights = function(C)
           return {
             CmpItemKindSnippet = { fg = C.base, bg = C.mauve },
             CmpItemKindKeyword = { fg = C.base, bg = C.red },
