@@ -82,8 +82,9 @@ return {
       end, { "i", "s" }),
     })
 
-    -- 在选择一个函数或者方法时，自动补充括号
-    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    -- NOTE: 在选择一个函数或者方法时，自动补充括号
+    -- LazyVim 中已经有了这个功能，所以这里不需要
+    -- local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+    -- cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
   end,
 }
