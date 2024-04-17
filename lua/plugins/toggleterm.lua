@@ -100,6 +100,16 @@ return {
       vim.keymap.set("n", "gF", function()
         traceback_jump()
       end, opts)
+
+      -- 在终端选择 buf 并跳转
+      local ok, window = pcall(require, "nvim-window")
+      if not ok then
+        vim.notify("nvim-window plugin not found", "debug")
+        return
+      end
+      vim.keymap.set("t", "<M-w>", function()
+        window.pick()
+      end, opts)
     end
 
     vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
