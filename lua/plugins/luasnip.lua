@@ -30,41 +30,41 @@ return {
       go = {},
       javascript = {},
       python = {
-        postfix(".pr", {
-          l("print(" .. l.POSTFIX_MATCH .. ")"),
-        }, {
-          condition = function()
-            -- 仅在前面有字符的情况下才会触发
-            if vim.fn.col(".") > 1 then
-              return true
-            end
-          end,
-          show_condition = function()
-            return vim.fn.col(".") > 1
-          end,
-        }),
-        -- s("glog", {
-        --   t("import logging"),
-        --   t({ "", "" }),
-        --   t("logger = logging.getLogger("),
-        --   i(1, "__name__"),
-        --   t(")"),
+        -- postfix(".pr", {
+        --   l("print(" .. l.POSTFIX_MATCH .. ")"),
+        -- }, {
+        --   condition = function()
+        --     -- 仅在前面有字符的情况下才会触发
+        --     if vim.fn.col(".") > 1 then
+        --       return true
+        --     end
+        --   end,
+        --   show_condition = function()
+        --     return vim.fn.col(".") > 1
+        --   end,
         -- }),
-        postfix(".li", {
-          l("logger.info(" .. l.POSTFIX_MATCH .. ")"),
-        }),
-        postfix(".ld", {
-          l("logger.debug(" .. l.POSTFIX_MATCH .. ")"),
-        }),
-        postfix(".le", {
-          l("logger.error(" .. l.POSTFIX_MATCH .. ")"),
-        }),
-        postfix(".lw", {
-          l("logger.warning(" .. l.POSTFIX_MATCH .. ")"),
-        }),
-        postfix(".lc", {
-          l("logger.critical(" .. l.POSTFIX_MATCH .. ")"),
-        }),
+        -- -- s("glog", {
+        -- --   t("import logging"),
+        -- --   t({ "", "" }),
+        -- --   t("logger = logging.getLogger("),
+        -- --   i(1, "__name__"),
+        -- --   t(")"),
+        -- -- }),
+        -- postfix(".li", {
+        --   l("logger.info(" .. l.POSTFIX_MATCH .. ")"),
+        -- }),
+        -- postfix(".ld", {
+        --   l("logger.debug(" .. l.POSTFIX_MATCH .. ")"),
+        -- }),
+        -- postfix(".le", {
+        --   l("logger.error(" .. l.POSTFIX_MATCH .. ")"),
+        -- }),
+        -- postfix(".lw", {
+        --   l("logger.warning(" .. l.POSTFIX_MATCH .. ")"),
+        -- }),
+        -- postfix(".lc", {
+        --   l("logger.critical(" .. l.POSTFIX_MATCH .. ")"),
+        -- }),
         -- el -> else:
         s("el", {
           t("else:"),
