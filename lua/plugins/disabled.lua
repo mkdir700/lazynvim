@@ -4,6 +4,8 @@ local disabled_plugins = {
   "s1n7ax/nvim-window-picker",
   "sychen52/gF-python-traceback",
   "b0o/incline.nvim",
+  "ray-x/go.nvim",
+  "petertriho/nvim-scrollbar",
 }
 
 local results = {}
