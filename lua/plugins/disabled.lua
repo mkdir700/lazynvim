@@ -6,6 +6,7 @@ local disabled_plugins = {
   "b0o/incline.nvim",
   "ray-x/go.nvim",
   "petertriho/nvim-scrollbar",
+  "windwp/nvim-autopairs",
 }
 
 local results = {}
