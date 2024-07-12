@@ -11,7 +11,8 @@ return {
       end
       local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
       if venv ~= "" then
-        require("venv-selector").retrieve_from_cache()
+        local cache = require("venv-selector.cached_venv")
+        cache.retrieve()
       end
     end,
   },

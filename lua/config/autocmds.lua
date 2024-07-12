@@ -35,7 +35,8 @@ vim.api.nvim_create_autocmd({ "User" }, {
     -- set the virtualenv from cache if pyproject.toml is present in root dir.
     local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
     if venv ~= "" then
-      require("venv-selector").retrieve_from_cache()
+      local cache = require("venv-selector.cached_venv")
+      cache.retrieve()
     end
   end,
 })
@@ -47,7 +48,8 @@ vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
     if venv ~= "" then
-      require("venv-selector").retrieve_from_cache()
+      local cache = require("venv-selector.cached_venv")
+      cache.retrieve()
     end
   end,
   once = true,
@@ -66,7 +68,8 @@ vim.api.nvim_create_autocmd("BufReadPre", {
 
     local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
     if venv ~= "" then
-      require("venv-selector").retrieve_from_cache()
+      local cache = require("venv-selector.cached_venv")
+      cache.retrieve()
     end
   end,
   once = true,
