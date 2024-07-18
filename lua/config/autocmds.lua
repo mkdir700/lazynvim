@@ -11,16 +11,15 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
--- Copy to system clipboard on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-  pattern = "*",
-  callback = function()
-    require("osc52").copy_register("+")
-    -- if vim.v.event.operator == "y" and vim.v.event.regname == "+" then
-    --   require("osc52").copy_register("+")
-    -- end
-  end,
-})
+-- Copy to system clipboard on yank if SSH_TTY is set
+if os.getenv("SSH_TTY") then
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    pattern = "*",
+    callback = function()
+      require("osc52").copy_register("+")
+    end,
+  })
+end
 
 -- change workdir to root dir when loading persisted session
 local group = vim.api.nvim_create_augroup("PersistedHooks", {})
