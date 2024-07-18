@@ -2,6 +2,10 @@ return {
   "nvim-neo-tree/neo-tree.nvim",
   dependencies = { "s1n7ax/nvim-window-picker" },
   opts = {
+    source_selector = {
+      winbar = true,
+      statusline = true,
+    },
     window = {
       mappings = {
         ["<Tab>"] = "focus_preview",
@@ -11,7 +15,6 @@ return {
         ["v"] = "open_vsplit",
       },
     },
-
     filesystem = {
       filtered_items = {
         hide_dotfiles = false,

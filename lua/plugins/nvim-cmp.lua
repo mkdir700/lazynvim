@@ -82,8 +82,17 @@ return {
       end, { "i", "s" }),
     })
 
-    -- 在选择一个函数或者方法时，自动补充括号
-    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
+    -- https://github.com/LazyVim/LazyVim/releases/tag/v10.20.0
+    -- v10.20.0 版本后对于 python 默认开启了括号补全，但是我感觉不好用，所以这里给移除
+    opts.auto_brackets = opts.auto_brackets or {}
+    for i, bracket in ipairs(opts.auto_brackets) do
+      if bracket == "python" then
+        table.remove(opts.auto_brackets, i)
+        break
+      end
+    end
+    -- local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+    -- cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
   end,
 }

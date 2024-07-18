@@ -71,3 +71,5 @@ if pcall(require, "refactoring") then
   -- vim.keymap.set("n", "<leader>cRB", ":Refactor extract_block_to_file")
   -- vim.keymap.set("x", "<leader>cRf", ":Refactor extract_to_file ")
 end
+
+vim.keymap.set("n", "<leader>we", ":Neotree focus<cr>", { desc = "Focus Neotree" })

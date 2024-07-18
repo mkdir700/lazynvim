@@ -1,3 +1,5 @@
+-- 为什么不使用 LazyVim 配置的方式，而是使用插件管理器的方式？
+-- 占用了 gp 和 gP 两个键位，这两个键位在我配置中用于快速预览方法定义和引用。
 return {
   "gbprod/yanky.nvim",
   keys = function()
@@ -9,7 +11,7 @@ return {
         end,
         desc = "Open Yank History",
       },
-      { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
+      -- { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
       -- { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after selection" },
       -- { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before selection" },
       { "[y", "<Plug>(YankyCycleForward)", desc = "Cycle forward through yank history" },

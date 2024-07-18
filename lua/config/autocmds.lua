@@ -11,14 +11,15 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
--- Copy to system clipboard on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    if vim.v.event.operator == "y" and vim.v.event.regname == "+" then
+-- Copy to system clipboard on yank if SSH_TTY is set
+if os.getenv("SSH_TTY") then
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    pattern = "*",
+    callback = function()
       require("osc52").copy_register("+")
-    end
-  end,
-})
+    end,
+  })
+end
 
 -- change workdir to root dir when loading persisted session
 local group = vim.api.nvim_create_augroup("PersistedHooks", {})
@@ -33,7 +34,8 @@ vim.api.nvim_create_autocmd({ "User" }, {
     -- set the virtualenv from cache if pyproject.toml is present in root dir.
     local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
     if venv ~= "" then
-      require("venv-selector").retrieve_from_cache()
+      local cache = require("venv-selector.cached_venv")
+      cache.retrieve()
     end
   end,
 })
@@ -45,7 +47,8 @@ vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
     if venv ~= "" then
-      require("venv-selector").retrieve_from_cache()
+      local cache = require("venv-selector.cached_venv")
+      cache.retrieve()
     end
   end,
   once = true,
@@ -64,7 +67,8 @@ vim.api.nvim_create_autocmd("BufReadPre", {
 
     local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
     if venv ~= "" then
-      require("venv-selector").retrieve_from_cache()
+      local cache = require("venv-selector.cached_venv")
+      cache.retrieve()
     end
   end,
   once = true,

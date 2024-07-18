@@ -5,6 +5,12 @@ return {
     name = "catppuccin",
     config = function()
       require("catppuccin").setup({
+        term_colors = true,
+        dim_inactive = {
+          enabled = true, -- dims the background color of inactive window
+          shade = "dark",
+          percentage = 0.5, -- percentage of the shade to apply to the inactive window
+        },
         styles = {
           comments = { "bold" },
           properties = { "bold" },
@@ -19,7 +25,7 @@ return {
           strings = {},
           variables = {},
         },
-        custom_highlights = function(colors)
+        custom_highlights = function(C)
           return {
             CmpItemKindSnippet = { fg = C.base, bg = C.mauve },
             CmpItemKindKeyword = { fg = C.base, bg = C.red },

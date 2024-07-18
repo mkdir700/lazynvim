@@ -3,7 +3,13 @@ return {
   event = "VeryLazy",
   vscode = true,
   ---@type Flash.Config
-  opts = {},
+  opts = {
+    label = {
+      rainbow = {
+        enabled = true,
+      },
+    },
+  },
   keys = {
     {
       "s",
