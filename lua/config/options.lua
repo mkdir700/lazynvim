@@ -34,3 +34,5 @@ vim.g.neovide_transparency = 0.9
 -- vim.g.neovide_background_color = "#0f1117" .. alpha()
 vim.g.experimental_layer_grouping = false
 
+-- "github" | "fittencode"
+vim.g.code_copilot = "fittencode"
