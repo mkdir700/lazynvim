@@ -4,7 +4,6 @@ return {
     event = "BufRead",
     ft = { "python" },
     config = function()
-      -- NOTE: 根据此插件新增了一个 autocmd
       require("f-string-toggle").setup({
         key_binding = "<leader>cz",
         key_binding_desc = "Toggle f-string",
