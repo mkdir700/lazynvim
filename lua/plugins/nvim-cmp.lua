@@ -43,13 +43,24 @@ end
 
 return {
   "hrsh7th/nvim-cmp",
-  dependencies = { "hrsh7th/cmp-emoji" },
+  dependencies = { "hrsh7th/cmp-emoji", "lukas-reineke/cmp-under-comparator" },
   ---@param opts cmp.ConfigSchema
   opts = function(_, opts)
     local luasnip = require("luasnip")
     local cmp = require("cmp")
 
     opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "emoji" } }))
+    -- 解决 cmp 排序问题，优先展示非下划线开头的选项
+    opts.sorting.comparators = {
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      require("cmp-under-comparator").under,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    }
 
     opts.mapping = vim.tbl_extend("force", opts.mapping, {
       ["<Tab>"] = cmp.mapping(function(fallback)
