@@ -60,16 +60,4 @@ if pcall(require, "nvim-treesitter.textobjects.repeatable_move") then
   -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
 end
 
--- plugins: refactoring.nvim
--- Need to judge whether the refactoring.nvim plug-in is installed
-if pcall(require, "refactoring") then
-  vim.keymap.set("x", "<leader>cre", ":Refactor extract ", { desc = "Extract function" })
-  vim.keymap.set("x", "<leader>crv", ":Refactor extract_var ", { desc = "Extract variable" })
-  vim.keymap.set({ "n", "x" }, "<leader>cR", ":Refactor inline_var", { desc = "Inline variable" })
-  -- vim.keymap.set("n", "<leader>ci", ":Refactor inline_func", { desc = "Inline function" })
-  -- vim.keymap.set("n", "<leader>cb", ":Refactor extract_block", { desc = "Extract block" })
-  -- vim.keymap.set("n", "<leader>cRB", ":Refactor extract_block_to_file")
-  -- vim.keymap.set("x", "<leader>cRf", ":Refactor extract_to_file ")
-end
-
 vim.keymap.set("n", "<leader>we", ":Neotree focus<cr>", { desc = "Focus Neotree" })
