@@ -12,7 +12,7 @@ require("lazy").setup({
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     { import = "lazyvim.plugins.extras.lsp.neoconf" },
     -- { import = "lazyvim.plugins.extras.lsp.none-ls" },
-    { import = "lazyvim.plugins.extras.ui.alpha" },
+    { import = "lazyvim.plugins.extras.ui.dashboard-nvim" },
     { import = "lazyvim.plugins.extras.lang.python" },
     { import = "lazyvim.plugins.extras.lang.go" },
     { import = "lazyvim.plugins.extras.lang.typescript" },
@@ -27,7 +27,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.linting.eslint" },
     { import = "lazyvim.plugins.extras.formatting.prettier" },
     { import = "lazyvim.plugins.extras.formatting.black" },
-    vim.g.vscode and { import = "lazyvim.plugins.extras.vscode" } or nil,
+    vim.fn.getenv("VSCODE_INJECTION") and { import = "lazyvim.plugins.extras.vscode" } or nil,
     -- import/override with your plugins
     { import = "plugins" },
     { import = "plugins.lang" },

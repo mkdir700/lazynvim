@@ -43,6 +43,6 @@ vim.g.code_copilot = "fittencode"
 
 -- 判断是否从 vscode 启动，如果是则设置为 true
 -- 用于在启动时加载不同的配置
-if vim.fn.getenv("VSCODE_INJECTION") == "1" then
+if vim.fn.getenv("VSCODE_INJECTION") ~= vim.NIL then
   vim.g.vscode = true
 end
