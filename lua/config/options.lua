@@ -36,8 +36,13 @@ vim.g.experimental_layer_grouping = false
 
 -- "github" | "fittencode"
 vim.g.code_copilot = "fittencode"
---
 -- -- LSP Server to use for Python.
 -- -- Set to "basedpyright" to use basedpyright instead of pyright.
 -- vim.g.lazyvim_python_lsp = "pyright"
 -- -- Set to "ruff_lsp" to use the old LSP implementation version.
+
+-- 判断是否从 vscode 启动，如果是则设置为 true
+-- 用于在启动时加载不同的配置
+if vim.fn.getenv("VSCODE_INJECTION") == "1" then
+  vim.g.vscode = true
+end

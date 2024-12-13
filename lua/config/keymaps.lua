@@ -31,8 +31,6 @@ map("x", "L", "$")
 map("x", "H", "$")
 map("x", "p", "P")
 
-local wk = require("which-key")
-
 -- plugins: lsp
 map("n", "<leader>ar", ":LspRestart<cr>", { desc = "Restart LSP" })
 
