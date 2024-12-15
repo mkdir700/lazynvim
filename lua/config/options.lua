@@ -2,13 +2,13 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
-vim.wo.foldmethod = "expr"
-vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
-vim.wo.foldlevel = 10
-vim.wo.foldminlines = 1
-vim.wo.foldnestmax = 10
-vim.wo.foldtext =
-  [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
+-- vim.wo.foldmethod = "expr"
+-- vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.wo.foldlevel = 10
+-- vim.wo.foldminlines = 1
+-- vim.wo.foldnestmax = 10
+-- vim.wo.foldtext =
+--   [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
 
 vim.o.sessionoptions = "buffers,curdir,folds,globals,tabpages,winpos,winsize"
 vim.o.swapfile = false
@@ -41,8 +41,9 @@ vim.g.code_copilot = "fittencode"
 -- vim.g.lazyvim_python_lsp = "pyright"
 -- -- Set to "ruff_lsp" to use the old LSP implementation version.
 
--- 判断是否从 vscode 启动，如果是则设置为 true
--- 用于在启动时加载不同的配置
-if vim.fn.getenv("VSCODE_INJECTION") ~= vim.NIL then
-  vim.g.vscode = true
-end
+vim.cmd [[
+set tagfunc=v:lua.vim.lsp.tagfunc
+set jumpoptions+=stack
+]]
+
+vim.g.snacks_animate = true
