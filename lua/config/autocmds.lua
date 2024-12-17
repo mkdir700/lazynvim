@@ -74,55 +74,36 @@ vim.api.nvim_create_autocmd("BufReadPre", {
   once = true,
 })
 
--- -- Toggle f-string on insert leave and text change
--- vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
---   desc = "f-string toggle",
---   pattern = "*.py",
---   callback = function()
---     local ts_utils = require("nvim-treesitter.ts_utils")
---     local winnr = vim.api.nvim_get_current_win()
---     local cursor = vim.api.nvim_win_get_cursor(winnr)
---     local node = ts_utils.get_node_at_cursor()
---
---     while (node ~= nil) and (node:type() ~= "string") do
---       node = node:parent()
---     end
---
---     if node == nil then
---       return
---     end
---
---     local find_brackets = function(str)
---       return str:find("{") and str:find("}")
---     end
---
---     local str_content = vim.api.nvim_get_current_line()
---     local has_brackets = find_brackets(str_content)
---
---     local srow, scol, ecol, erow = ts_utils.get_vim_range({ node:range() })
---     vim.fn.setcursorcharpos({ srow, scol })
---     local char = vim.api.nvim_get_current_line():sub(scol, scol)
---     local is_fstring = (char == "f")
---
---     if has_brackets and not is_fstring then
---       vim.cmd("normal if")
---
---       -- if cursor is in the same line as text change
---       if srow == cursor[1] then
---         -- positive offset to cursor
---         cursor[2] = cursor[2] + 1
---       end
---     else
---       if not has_brackets and is_fstring then
---         vim.cmd("normal x")
---         -- if cursor is in the same line as text change
---         if srow == cursor[1] then
---           -- negative offset to cursor
---           cursor[2] = cursor[2] - 1
---         end
---       end
---     end
---
---     vim.api.nvim_win_set_cursor(winnr, cursor)
---   end,
--- })
+local function auto_activate_python_venv()
+  -- NOTE: 在 venv-selector 中被设置 VIRTUAL_ENV 环境变量
+  local virtual_env = vim.fn.getenv("VIRTUAL_ENV")
+  local is_windows = vim.loop.os_uname().version:match("Windows")
+  -- 是否为首次打开终端
+  if virtual_env ~= vim.NIL then
+    if is_windows then
+      vim.api.nvim_chan_send(vim.b.terminal_job_id, string.format("%s/Scripts/activate", virtual_env) .. "\n")
+      vim.api.nvim_chan_send(vim.b.terminal_job_id, "cls\n")
+    else
+      -- 打开终端后，自动执行激活虚拟环境命令
+      -- 如果当前终端是 fish
+      if vim.o.shell:find("fish") then
+        vim.api.nvim_chan_send(vim.b.terminal_job_id, string.format("source %s/bin/activate.fish", virtual_env) .. "\n")
+      else
+        -- 如果当前终端是 bash
+        vim.api.nvim_chan_send(vim.b.terminal_job_id, string.format("source %s/bin/activate", virtual_env) .. "\n")
+      end
+      vim.api.nvim_chan_send(vim.b.terminal_job_id, "clear\n")
+    end
+  end
+end
+
+-- 在打开终端时自动执行命令
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  callback = function()
+    -- 设置终端模式为 insert 模式
+    -- vim.cmd("startinsert")
+    -- 这里可以添加你想要执行的命令，例如：
+    auto_activate_python_venv()
+  end,
+})

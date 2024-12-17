@@ -8,7 +8,7 @@ local function get_file_and_line(text)
   end
 
   -- 匹配类似 "/path/to/file.py:95: Error" 格式
-  file, line = text:match('(.+):(%d+):')
+  file, line = text:match("(.+):(%d+):")
   if file and line then
     return file, line
   end
@@ -27,7 +27,7 @@ local function jump()
   local file, line = get_file_and_line(traceback)
   -- 使用 flatten.nvim 的 edit_files 函数
   local edit_files = require("flatten.core").edit_files
-  
+
   if file and line then
     edit_files({
       files = { file },
@@ -59,8 +59,8 @@ return {
             desc = "Traceback Jump",
           }
           vim.keymap.set("n", "gF", jump, keymap_opts)
-        end
+        end,
       })
     end,
-  }
+  },
 }
