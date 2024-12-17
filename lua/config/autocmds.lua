@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd("BufReadPre", {
   callback = function()
     -- if VIRTUAL_ENV is set, then don't do anything
     local virtual_env = vim.fn.getenv("VIRTUAL_ENV")
-    vim.notify(type(virtual_env), "debug")
+    -- vim.notify(type(virtual_env), "debug")
     if type(virtual_env) == "string" then
       vim.notify("VIRTUAL_ENV is set, not doing anything", "debug")
       return
@@ -101,9 +101,12 @@ end
 vim.api.nvim_create_autocmd("TermOpen", {
   pattern = "*",
   callback = function()
-    -- 设置终端模式为 insert 模式
-    -- vim.cmd("startinsert")
-    -- 这里可以添加你想要执行的命令，例如：
-    auto_activate_python_venv()
+    local bufname = vim.fn.bufname()
+    local shell_type = vim.fn.fnamemodify(vim.env.SHELL or "", ":t")
+    -- vim.notify(bufname, "debug")
+    -- vim.notify(shell_type, "debug")
+    if bufname:match("term://.*//.*/" .. shell_type .. "$") then
+      auto_activate_python_venv()
+    end
   end,
 })
