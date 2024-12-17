@@ -39,4 +39,11 @@ return {
       require("fittencode").setup({})
     end,
   },
+  {
+    "supermaven-inc/supermaven-nvim",
+    enabled = vim.g.code_copilot == "supermaven",
+    config = function()
+      require("supermaven-nvim").setup({})
+    end,
+  },
 }
