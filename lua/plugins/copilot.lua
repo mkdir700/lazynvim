@@ -43,7 +43,24 @@ return {
     "supermaven-inc/supermaven-nvim",
     enabled = vim.g.code_copilot == "supermaven",
     config = function()
-      require("supermaven-nvim").setup({})
+      require("supermaven-nvim.completion_preview").suggestion_group = "SupermavenSuggestion"
+      LazyVim.cmp.actions.ai_accept = function()
+        local suggestion = require("supermaven-nvim.completion_preview")
+        if suggestion.has_suggestion() then
+          LazyVim.create_undo()
+          vim.schedule(function()
+            suggestion.on_accept_suggestion()
+          end)
+          return true
+        end
+      end
+
+      require("supermaven-nvim").setup({
+        color = {
+          suggestion_color = "#ffffff",
+          cterm = 244,
+        },
+      })
     end,
   },
 }
