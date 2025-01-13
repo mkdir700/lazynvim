@@ -45,6 +45,17 @@ return {
   "saghen/blink.cmp",
   opts = {
     completion = {
+      list = {
+        selection = "auto_insert",
+      },
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 200,
+        window = {
+          border = "rounded",
+          -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:BlinkCmpDocCursorLine,Search:None",
+        },
+      },
       menu = {
         draw = {
           columns = { { "item_idx" }, { "kind_icon" }, { "label", "label_description", gap = 1 } },
@@ -57,15 +68,18 @@ return {
             },
           },
         },
+        border = "rounded",
+        -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine: BlinkCmpMenuSelection,Search:None",
       },
     },
     keymap = {
       preset = "enter",
-      ["<C-y>"] = { "select_and_accept" },
+      ["<Enter>"] = { "select_and_accept", "fallback" },
       ["<Tab>"] = {
         LazyVim.cmp.map({ "snippet_forward", "ai_accept" }),
         "fallback",
       },
+      ["<C-d>"] = { "show_documentation", "hide_documentation" },
       ["<A-1>"] = {
         function(cmp)
           cmp.accept({ index = 1 })
