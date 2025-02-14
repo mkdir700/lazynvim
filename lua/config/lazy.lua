@@ -32,6 +32,9 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.ai.supermaven" },
     -- import/override with your plugins
     { import = "plugins" },
+    { import = "plugins.ai" },
+    { import = "plugins.editor" },
+    { import = "plugins.jump" },
     { import = "plugins.lang" },
     { import = "plugins.ui" },
   },

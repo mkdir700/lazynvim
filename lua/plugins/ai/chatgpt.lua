@@ -5,7 +5,7 @@ return {
     require("chatgpt").setup({
       actions_paths = {
         -- 拼接绝对路径, ./actions.json
-        vim.fn.stdpath("config") .. "/lua/plugins/chatgpt/actions.json",
+        vim.fn.stdpath("config") .. "/lua/plugins/ai/actions.json",
       },
       chat = {
         keymaps = {
