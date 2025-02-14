@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd("BufReadPre", {
   callback = function()
     -- if VIRTUAL_ENV is set, then don't do anything
     local virtual_env = vim.fn.getenv("VIRTUAL_ENV")
-    vim.notify(type(virtual_env), "debug")
+    -- vim.notify(type(virtual_env), "debug")
     if type(virtual_env) == "string" then
       vim.notify("VIRTUAL_ENV is set, not doing anything", "debug")
       return
@@ -72,4 +72,41 @@ vim.api.nvim_create_autocmd("BufReadPre", {
     end
   end,
   once = true,
+})
+
+local function auto_activate_python_venv()
+  -- NOTE: 在 venv-selector 中被设置 VIRTUAL_ENV 环境变量
+  local virtual_env = vim.fn.getenv("VIRTUAL_ENV")
+  local is_windows = vim.loop.os_uname().version:match("Windows")
+  -- 是否为首次打开终端
+  if virtual_env ~= vim.NIL then
+    if is_windows then
+      vim.api.nvim_chan_send(vim.b.terminal_job_id, string.format("%s/Scripts/activate", virtual_env) .. "\n")
+      vim.api.nvim_chan_send(vim.b.terminal_job_id, "cls\n")
+    else
+      -- 打开终端后，自动执行激活虚拟环境命令
+      -- 如果当前终端是 fish
+      if vim.o.shell:find("fish") then
+        vim.api.nvim_chan_send(vim.b.terminal_job_id, string.format("source %s/bin/activate.fish", virtual_env) .. "\n")
+      else
+        -- 如果当前终端是 bash
+        vim.api.nvim_chan_send(vim.b.terminal_job_id, string.format("source %s/bin/activate", virtual_env) .. "\n")
+      end
+      vim.api.nvim_chan_send(vim.b.terminal_job_id, "clear\n")
+    end
+  end
+end
+
+-- 在打开终端时自动执行命令
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  callback = function()
+    local bufname = vim.fn.bufname()
+    local shell_type = vim.fn.fnamemodify(vim.env.SHELL or "", ":t")
+    -- vim.notify(bufname, "debug")
+    -- vim.notify(shell_type, "debug")
+    if bufname:match("term://.*//.*/" .. shell_type .. "$") then
+      auto_activate_python_venv()
+    end
+  end,
 })

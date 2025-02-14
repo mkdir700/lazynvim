@@ -5,7 +5,7 @@ return {
     require("chatgpt").setup({
       actions_paths = {
         -- 拼接绝对路径, ./actions.json
-        vim.fn.stdpath("config") .. "/lua/plugins/chatgpt/actions.json",
+        vim.fn.stdpath("config") .. "/lua/plugins/ai/actions.json",
       },
       chat = {
         keymaps = {
@@ -13,11 +13,11 @@ return {
         },
       },
       openai_params = {
-        model = "gpt-3.5-turbo-1106",
+        model = "gpt-4o-mini",
         max_tokens = 3000,
       },
       openai_edit_params = {
-        model = "gpt-3.5-turbo-1106",
+        model = "gpt-4o-mini",
       },
     })
 
