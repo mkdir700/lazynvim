@@ -45,8 +45,8 @@ return {
   "saghen/blink.cmp",
   opts = {
     completion = {
-      list = {
-        selection = "auto_insert",
+      accept = {
+        create_undo_point = true,
       },
       documentation = {
         auto_show = true,
