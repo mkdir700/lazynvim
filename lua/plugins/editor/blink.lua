@@ -57,6 +57,9 @@ return {
         },
       },
       menu = {
+        auto_show = function(ctx)
+          return ctx.mode ~= "cmdline"
+        end,
         draw = {
           columns = { { "item_idx" }, { "kind_icon" }, { "label", "label_description", gap = 1 } },
           components = {
