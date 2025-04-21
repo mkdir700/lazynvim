@@ -43,9 +43,15 @@ vim.g.lazyvim_python_lsp = "pyright"
 -- Set to "ruff_lsp" to use the old LSP implementation version.
 vim.g.lazyvim_python_ruff = "ruff"
 
-vim.cmd [[
+vim.cmd([[
 set tagfunc=v:lua.vim.lsp.tagfunc
 set jumpoptions+=stack
-]]
+]])
 
 vim.g.snacks_animate = true
+
+vim.filetype.add({
+  extension = {
+    ["http"] = "http",
+  },
+})
