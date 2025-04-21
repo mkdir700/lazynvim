@@ -14,6 +14,7 @@
   "bullets.vim": { "branch": "master", "commit": "8f3259e807c40b91d247f612823295ab99777a65" },
   "catppuccin": { "branch": "main", "commit": "5b5e3aef9ad7af84f463d17b5479f06b87d5c429" },
   "conform.nvim": { "branch": "master", "commit": "6632e7d788a85bf8405ea0c812d343fc308b7b8c" },
+  "copy_with_context.nvim": { "branch": "master", "commit": "f6022e30c51a46a4b87a237244d46ba5fb9807e2" },
   "dial.nvim": { "branch": "master", "commit": "2c7e2750372918f072a20f3cf754d845e143d7c9" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "dotenv.nvim": { "branch": "main", "commit": "7d516e9293c6e3ac21830fb10a4e8674c02747c6" },
