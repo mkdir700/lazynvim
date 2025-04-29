@@ -55,3 +55,5 @@ vim.filetype.add({
     ["http"] = "http",
   },
 })
+
+vim.g.lazyvim_picker = "snacks"
