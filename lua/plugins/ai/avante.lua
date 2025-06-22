@@ -1,6 +1,7 @@
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
+  enabled = false,
   lazy = false,
   version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
   -- @class avante.Config
