@@ -2,7 +2,7 @@ return {
   "ojroques/nvim-osc52",
   cond = function()
     -- 检查环境变量 SSH_TTY 是否存在
-    return os.getenv("SSH_TTY")
+    return os.getenv("SSH_TTY") or os.getenv("WSL_DISTRO_NAME")
   end,
   config = function()
     require("osc52").setup({

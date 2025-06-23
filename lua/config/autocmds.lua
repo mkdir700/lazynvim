@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 
 -- Copy to system clipboard on yank if SSH_TTY is set
-if os.getenv("SSH_TTY") then
+if os.getenv("SSH_TTY") or os.getenv("WSL_DISTRO_NAME") then
   vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
     callback = function()
