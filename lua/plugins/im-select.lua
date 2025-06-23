@@ -18,7 +18,7 @@ return {
     "keaising/im-select.nvim",
     cond = function()
       -- 检查环境变量 SSH_TTY 是否存在
-      return not os.getenv("SSH_TTY")
+      return not os.getenv("SSH_TTY") and not os.getenv("WSL_DISTRO_NAME")
     end,
     config = function()
       -- 判断当前平台是否为 linux
