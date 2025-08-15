@@ -31,8 +31,8 @@ vim.g.neovide_transparency = 0.9
 -- vim.g.neovide_background_color = "#0f1117" .. alpha()
 vim.g.experimental_layer_grouping = false
 
--- "github" | "fittencode" | "supermaven"
-vim.g.code_copilot = "supermaven"
+-- "github" | "fittencode" | "supermaven" | "augment"
+vim.g.code_copilot = "augment"
 
 -- LSP Server to use for Python.
 -- Set to "basedpyright" to use basedpyright instead of pyright.
