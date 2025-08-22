@@ -54,3 +54,6 @@ vim.filetype.add({
 })
 
 vim.g.lazyvim_picker = "snacks"
+
+-- 让 y/p 默认走系统剪贴板
+vim.opt.clipboard = "unnamedplus"
