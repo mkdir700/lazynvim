@@ -29,11 +29,12 @@ return {
           default_command = "fcitx5-remote",
         })
       -- 判断当前平台是否为 macOS
-      elseif platform == "mac" then
-        require("im_select").setup({
-          default_im_select = "com.apple.keylayout.ABC",
-          default_command = "im-select",
-        })
+      -- elseif platform == "mac" then
+      --   require("im_select").setup({
+      --     default_im_select = "com.apple.keylayout.ABC",
+      --     default_command = "macism",
+      --     set_default_events = { "InsertLeave", "CmdlineLeave" },
+      --   })
       end
     end,
   },
