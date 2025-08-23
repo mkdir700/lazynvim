@@ -34,6 +34,9 @@ return {
   -- OSC52 复制到外部剪贴板（tmux/SSH 场景）
   {
     "ojroques/nvim-osc52",
+    cond = function()
+      return os.getenv("SSH_TTY") or os.getenv("WSL_DISTRO_NAME")
+    end,
     config = function()
       local osc52 = require("osc52")
       osc52.setup({
