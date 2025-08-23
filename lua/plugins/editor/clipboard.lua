@@ -12,7 +12,7 @@ return {
           end,
           desc = "Open Yank History",
         },
-        -- { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
+        { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
         -- { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after selection" },
         -- { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before selection" },
         { "[y", "<Plug>(YankyCycleForward)", desc = "Cycle forward through yank history" },
