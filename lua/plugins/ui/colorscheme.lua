@@ -59,9 +59,15 @@ return {
     end,
   },
   {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "tokyonight-night",
-    },
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("kanagawa").setup({
+        theme = "dragon",
+        dimInactive = true, -- 暗化非活动窗口
+      })
+      vim.cmd("colorscheme kanagawa")
+    end,
   },
 }
