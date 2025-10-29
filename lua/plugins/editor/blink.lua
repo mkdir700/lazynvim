@@ -79,7 +79,10 @@ return {
       preset = "enter",
       ["<Enter>"] = { "select_and_accept", "fallback" },
       ["<Tab>"] = {
-        LazyVim.cmp.map({ "snippet_forward", "ai_accept" }),
+        "snippet_forward",
+        function() -- sidekick next edit suggestion
+          return require("sidekick").nes_jump_or_apply()
+        end,
         "fallback",
       },
       ["<C-d>"] = { "show_documentation", "hide_documentation" },
