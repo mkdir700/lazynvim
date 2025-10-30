@@ -118,3 +118,14 @@ end, { desc = "Terminal (cwd)" })
 map("n", "<leader>fT", function()
   Snacks.terminal(nil, { cwd = LazyVim.root() })
 end, { desc = "Terminal (Root Dir)" })
+
+
+vim.keymap.set("v", "<leader>cp", function()
+  local path = vim.fn.expand("%")
+  local start_line = vim.fn.line("v")
+  local end_line = vim.fn.line(".")
+  local range = start_line .. "-" .. end_line
+  local full = path .. ":" .. range
+  vim.fn.setreg("+", full)
+  vim.notify("Copied: " .. full, vim.log.levels.INFO)
+end, { desc = "Copy file + line range" })
