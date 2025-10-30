@@ -1,7 +1,11 @@
 return {
   "https://github.com/swaits/zellij-nav.nvim",
   enabled = function()
-    return vim.env.ZELLIJ_SESSION ~= nil
+    -- Zellij sets one or more of these env vars when running inside a session
+    return vim.env.ZELLIJ ~= nil
+      or vim.env.ZELLIJ_SESSION ~= nil
+      or vim.env.ZELLIJ_SESSION_NAME ~= nil
+      or vim.env.ZELLIJ_EXECUTION_CONTEXT ~= nil
   end,
   config = function()
     require("zellij-nav").setup()
