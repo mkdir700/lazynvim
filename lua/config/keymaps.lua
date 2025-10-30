@@ -104,3 +104,17 @@ if pcall(require, "nvim-treesitter.textobjects.repeatable_move") then
 end
 
 vim.keymap.set("n", "<leader>we", ":Neotree focus<cr>", { desc = "Focus Neotree" })
+
+-- terminal
+map({ "n", "t" }, "<c-_>", function()
+  Snacks.terminal()
+end, { desc = "which_key_ignore" })
+map({ "n", "t" }, "<c-/>", function()
+  Snacks.terminal()
+end, { desc = "Terminal (cwd)" })
+map("n", "<leader>ft", function()
+  Snacks.terminal()
+end, { desc = "Terminal (cwd)" })
+map("n", "<leader>fT", function()
+  Snacks.terminal(nil, { cwd = LazyVim.root() })
+end, { desc = "Terminal (Root Dir)" })
