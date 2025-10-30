@@ -5,21 +5,34 @@ return {
     event = "InsertEnter",
     cmd = "Copilot",
     build = ":Copilot auth",
-    opts = {
-      suggestion = {
+    opts = function(_, opts)
+      opts = opts or {}
+      opts.suggestion = vim.tbl_deep_extend("force", {
         enabled = true,
         auto_trigger = true,
         keymap = {
           -- accept = "<M-f>",
           accept_word = "<C-y>",
         },
-      },
-      panel = { enabled = false },
-      filetypes = {
+      }, opts.suggestion or {})
+      opts.panel = vim.tbl_deep_extend("force", { enabled = false }, opts.panel or {})
+      opts.filetypes = vim.tbl_deep_extend("force", {
         markdown = true,
         help = true,
-      },
-    },
+      }, opts.filetypes or {})
+      return opts
+    end,
+    config = function(_, opts)
+      require("copilot").setup(opts)
+      LazyVim.cmp.actions.ai_accept = function()
+        local ok, suggestion = pcall(require, "copilot.suggestion")
+        if ok and suggestion.is_visible() then
+          LazyVim.create_undo()
+          suggestion.accept()
+          return true
+        end
+      end
+    end,
     keys = {
       {
         "<leader>uo",
