@@ -1,6 +1,7 @@
 return {
   "ziontee113/syntax-tree-surfer",
-  event = "BufRead",
+  event = "BufReadPost",
+  dependencies = { "nvim-treesitter/nvim-treesitter" },
   keys = {
     {
       "<C-j>",
@@ -39,7 +40,4 @@ return {
       mode = { "x" },
     },
   },
-  config = function()
-    require("syntax-tree-surfer").setup({})
-  end,
 }
