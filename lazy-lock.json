@@ -76,7 +76,7 @@
   "refactoring.nvim": { "branch": "master", "commit": "2be7ea3f10b7e59658f5abf6dffc50b5d61964d6" },
   "render-markdown.nvim": { "branch": "main", "commit": "a1b0988f5ab26698afb56b9c2f0525a4de1195c1" },
   "sidekick.nvim": { "branch": "main", "commit": "6c53e5fb5430821634062e034e3004a9cbea24e6" },
-  "snacks.nvim": { "branch": "main", "commit": "bc0630e43be5699bb94dadc302c0d21615421d93" },
+  "snacks.nvim": { "branch": "main", "commit": "0bc7c2631a3bb35a20e0e5938401765bb9516496" },
   "supermaven-nvim": { "branch": "main", "commit": "07d20fce48a5629686aefb0a7cd4b25e33947d50" },
   "syntax-tree-surfer": { "branch": "master", "commit": "732ea6d0f868bcccd2f526be73afa46997d5a2fb" },
   "telescope.nvim": { "branch": "master", "commit": "b4da76be54691e854d3e0e02c36b0245f945c2c7" },
