@@ -112,13 +112,13 @@ vim.api.nvim_create_autocmd("TermOpen", {
 })
 
 vim.api.nvim_create_autocmd("VimLeave", {
-  desc = 'Zellij return to normal mode on exit Neovim',
+  desc = "Zellij return to normal mode on exit Neovim",
   pattern = "*",
   command = "silent !zellij action switch-mode normal",
 })
 
 vim.api.nvim_create_autocmd("BufReadPre", {
-  desc = 'Zellij lock tab on enter Neovim',
+  desc = "Zellij lock tab on enter Neovim",
   pattern = "*",
   command = "silent !zellij action switch-mode locked",
 })
