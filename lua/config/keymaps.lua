@@ -31,6 +31,51 @@ map("x", "L", "$")
 map("x", "H", "$")
 map("x", "p", "P")
 
+-- terminal: single press exits insert, double press hides buffer
+do
+  local term_escape = vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true)
+  local threshold = 300 -- ms window for double-tap detection
+
+  local function terminal_ctrl_q()
+    if vim.bo.buftype ~= "terminal" then
+      return
+    end
+
+    local now = vim.loop.hrtime() / 1e6
+    local state = vim.b._ctrl_q_state or { last = 0, from_insert = false }
+    local elapsed = now - (state.last or 0)
+    local double = state.last ~= 0 and elapsed <= threshold
+    local mode = vim.api.nvim_get_mode().mode
+
+    if double and state.from_insert then
+      if mode == "t" then
+        vim.api.nvim_feedkeys(term_escape, "n", true)
+      end
+      vim.b._terminal_last_mode = "n"
+      vim.b._ctrl_q_state = { last = 0, from_insert = false }
+      local buf = vim.api.nvim_get_current_buf()
+      vim.schedule(function()
+        if vim.api.nvim_buf_is_valid(buf) then
+          vim.cmd("hide")
+        end
+      end)
+      return
+    end
+
+    if mode == "t" then
+      vim.api.nvim_feedkeys(term_escape, "n", true)
+      vim.b._terminal_last_mode = "n"
+      vim.b._ctrl_q_state = { last = now, from_insert = true }
+    else
+      vim.cmd("startinsert")
+      vim.b._terminal_last_mode = "t"
+      vim.b._ctrl_q_state = { last = now, from_insert = false }
+    end
+  end
+
+  vim.keymap.set({ "t", "n" }, "<C-q>", terminal_ctrl_q, { desc = "Terminal ctrl-q actions" })
+end
+
 -- plugins: lsp
 map("n", "<leader>ar", ":LspRestart<cr>", { desc = "Restart LSP" })
 
@@ -59,3 +104,28 @@ if pcall(require, "nvim-treesitter.textobjects.repeatable_move") then
 end
 
 vim.keymap.set("n", "<leader>we", ":Neotree focus<cr>", { desc = "Focus Neotree" })
+
+-- terminal
+map({ "n", "t" }, "<c-_>", function()
+  Snacks.terminal()
+end, { desc = "which_key_ignore" })
+map({ "n", "t" }, "<c-/>", function()
+  Snacks.terminal()
+end, { desc = "Terminal (cwd)" })
+map("n", "<leader>ft", function()
+  Snacks.terminal()
+end, { desc = "Terminal (cwd)" })
+map("n", "<leader>fT", function()
+  Snacks.terminal(nil, { cwd = LazyVim.root() })
+end, { desc = "Terminal (Root Dir)" })
+
+
+vim.keymap.set("v", "<leader>cp", function()
+  local path = vim.fn.expand("%")
+  local start_line = vim.fn.line("v")
+  local end_line = vim.fn.line(".")
+  local range = start_line .. "-" .. end_line
+  local full = path .. ":" .. range
+  vim.fn.setreg("+", full)
+  vim.notify("Copied: " .. full, vim.log.levels.INFO)
+end, { desc = "Copy file + line range" })

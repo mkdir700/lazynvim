@@ -2,7 +2,7 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
-vim.o.foldcolumn = '1' -- '0' is not bad
+vim.o.foldcolumn = "1" -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
@@ -25,14 +25,13 @@ vim.g.neovide_cursor_unfocused_outline_width = 0.125
 
 -- neovide - window
 vim.g.neovide_window_blurred = true
--- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
-vim.g.neovide_transparency = 0.9
+vim.g.neovide_opacity = 0.95
 -- vim.g.transparency = 0.8
 -- vim.g.neovide_background_color = "#0f1117" .. alpha()
 vim.g.experimental_layer_grouping = false
 
--- "github" | "fittencode" | "supermaven"
-vim.g.code_copilot = "supermaven"
+-- "github" | "supermaven"
+vim.g.code_copilot = "github"
 
 -- LSP Server to use for Python.
 -- Set to "basedpyright" to use basedpyright instead of pyright.
@@ -54,3 +53,6 @@ vim.filetype.add({
 })
 
 vim.g.lazyvim_picker = "snacks"
+
+-- 让 y/p 默认走系统剪贴板
+vim.opt.clipboard = "unnamedplus"

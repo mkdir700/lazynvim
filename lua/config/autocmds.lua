@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 
 -- Copy to system clipboard on yank if SSH_TTY is set
-if os.getenv("SSH_TTY") then
+if os.getenv("SSH_TTY") or os.getenv("WSL_DISTRO_NAME") then
   vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
     callback = function()
@@ -109,4 +109,16 @@ vim.api.nvim_create_autocmd("TermOpen", {
       auto_activate_python_venv()
     end
   end,
+})
+
+vim.api.nvim_create_autocmd("VimLeave", {
+  desc = "Zellij return to normal mode on exit Neovim",
+  pattern = "*",
+  command = "silent !zellij action switch-mode normal",
+})
+
+vim.api.nvim_create_autocmd("BufReadPre", {
+  desc = "Zellij lock tab on enter Neovim",
+  pattern = "*",
+  command = "silent !zellij action switch-mode locked",
 })

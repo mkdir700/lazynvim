@@ -18,7 +18,7 @@ return {
     "keaising/im-select.nvim",
     cond = function()
       -- 检查环境变量 SSH_TTY 是否存在
-      return not os.getenv("SSH_TTY")
+      return not os.getenv("SSH_TTY") and not os.getenv("WSL_DISTRO_NAME")
     end,
     config = function()
       -- 判断当前平台是否为 linux
@@ -29,11 +29,12 @@ return {
           default_command = "fcitx5-remote",
         })
       -- 判断当前平台是否为 macOS
-      elseif platform == "mac" then
-        require("im_select").setup({
-          default_im_select = "com.apple.keylayout.ABC",
-          default_command = "im-select",
-        })
+      -- elseif platform == "mac" then
+      --   require("im_select").setup({
+      --     default_im_select = "com.apple.keylayout.ABC",
+      --     default_command = "macism",
+      --     set_default_events = { "InsertLeave", "CmdlineLeave" },
+      --   })
       end
     end,
   },

@@ -57,6 +57,9 @@ return {
         },
       },
       menu = {
+        auto_show = function(ctx)
+          return ctx.mode ~= "cmdline"
+        end,
         draw = {
           columns = { { "item_idx" }, { "kind_icon" }, { "label", "label_description", gap = 1 } },
           components = {
@@ -77,6 +80,10 @@ return {
       ["<Enter>"] = { "select_and_accept", "fallback" },
       ["<Tab>"] = {
         LazyVim.cmp.map({ "snippet_forward", "ai_accept" }),
+        function() -- sidekick next edit suggestion
+          local ok, sidekick = pcall(require, "sidekick")
+          return ok and sidekick.nes_jump_or_apply()
+        end,
         "fallback",
       },
       ["<C-d>"] = { "show_documentation", "hide_documentation" },
