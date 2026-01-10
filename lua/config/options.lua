@@ -31,7 +31,7 @@ vim.g.neovide_opacity = 0.95
 vim.g.experimental_layer_grouping = false
 
 -- "github" | "supermaven"
-vim.g.code_copilot = "github"
+vim.g.code_copilot = "supermaven"
 
 -- LSP Server to use for Python.
 -- Set to "basedpyright" to use basedpyright instead of pyright.
