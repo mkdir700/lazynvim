@@ -6,6 +6,14 @@ return {
         split = {
           width = 60,
         },
+        keys = {
+          stopinsert_ctrl_u = {
+            "<c-u>",
+            "stopinsert",
+            mode = "t",
+            desc = "Enter normal mode",
+          },
+        },
       },
       mux = {
         backend = "tmux",
@@ -22,14 +30,10 @@ return {
   },
   keys = {
     {
-      "<tab>",
+      "<leader>an",
       function()
-        -- if there is a next edit, jump to it, otherwise apply it if any
-        if not require("sidekick").nes_jump_or_apply() then
-          return "<Tab>" -- fallback to normal tab
-        end
+        require("sidekick").nes_jump_or_apply()
       end,
-      expr = true,
       desc = "Goto/Apply Next Edit Suggestion",
     },
     -- {
