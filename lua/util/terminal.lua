@@ -12,6 +12,24 @@ local M = {}
 
 -- 新建终端时的默认位置(还没有任何记忆时使用)。
 local DEFAULT_POSITION = "bottom"
+local last_terminal_buf
+
+local function remember_terminal(buf)
+  if buf and vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].filetype == "snacks_terminal" then
+    last_terminal_buf = buf
+  end
+end
+
+local function get_last_terminal()
+  if not (last_terminal_buf and vim.api.nvim_buf_is_valid(last_terminal_buf)) then
+    return nil
+  end
+  for _, term in ipairs(Snacks.terminal.list()) do
+    if term.buf == last_terminal_buf and term:buf_valid() then
+      return term
+    end
+  end
+end
 
 -- 读取某个 buffer 记住的位置(buffer-local,纯内存)。
 local function get_position(buf)
@@ -58,6 +76,7 @@ local function remember(win)
     local buf = vim.api.nvim_win_get_buf(win)
     if vim.api.nvim_buf_is_valid(buf) then
       vim.b[buf].term_position = p
+      remember_terminal(buf)
     end
   end
 end
@@ -65,20 +84,35 @@ end
 -- 打开/切换 cwd 终端,并应用/更新记忆的位置
 function M.toggle(opts)
   opts = opts or {}
-  local term = Snacks.terminal.get(nil, vim.tbl_extend("force", { create = false }, opts))
+  local count = opts.count or (vim.v.count > 0 and vim.v.count or nil)
+  if count then
+    opts.count = count
+  end
+
+  local term = count == nil and get_last_terminal() or nil
+  term = term or Snacks.terminal.get(nil, vim.tbl_extend("force", { create = false }, opts))
   if term and term:buf_valid() then
+    remember_terminal(term.buf)
     -- 当前隐藏、即将显示:把该 buffer 记住的位置写回再 show
     if not term:valid() then
       term.opts.position = get_position(term.buf)
     end
     term:toggle()
   else
-    Snacks.terminal(nil, vim.tbl_extend("force", { win = { position = DEFAULT_POSITION } }, opts))
+    term = Snacks.terminal(nil, vim.tbl_extend("force", { win = { position = DEFAULT_POSITION } }, opts))
+    remember_terminal(term.buf)
   end
 end
 
 function M.setup()
   local group = vim.api.nvim_create_augroup("snacks_term_position", { clear = true })
+
+  vim.api.nvim_create_autocmd("BufEnter", {
+    group = group,
+    callback = function(args)
+      remember_terminal(args.buf)
+    end,
+  })
 
   -- 离开终端窗口时(包括 toggle 隐藏前)记录位置,此时窗口仍有效
   vim.api.nvim_create_autocmd("WinLeave", {
