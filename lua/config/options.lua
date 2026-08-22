@@ -14,21 +14,7 @@ vim.o.swapfile = false
 -- If no prettier config file is found, the formatter will not be used
 vim.g.lazyvim_prettier_needs_config = false
 
--- neovide options
-vim.g.neovide_cursor_animation_length = 0.03
-vim.g.neovide_cursor_trail_length = 0.2
-vim.g.neovide_cursor_antialiasing = true
-vim.g.neovide_cursor_vfx_mode = "railgun"
-vim.g.neovide_cursor_vfx_mode = "ripple"
-vim.g.neovide_cursor_animate_command_line = true
-vim.g.neovide_cursor_unfocused_outline_width = 0.125
-
--- neovide - window
-vim.g.neovide_window_blurred = true
-vim.g.neovide_opacity = 0.95
--- vim.g.transparency = 0.8
--- vim.g.neovide_background_color = "#0f1117" .. alpha()
-vim.g.experimental_layer_grouping = false
+require("config.neovide")
 
 -- "github" | "supermaven"
 vim.g.code_copilot = "supermaven"
