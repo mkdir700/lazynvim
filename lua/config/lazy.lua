@@ -35,7 +35,8 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.formatting.prettier" },
     { import = "lazyvim.plugins.extras.formatting.black" },
     { import = "lazyvim.plugins.extras.vscode" },
-    { import = "lazyvim.plugins.extras.ai.supermaven" },
+    { import = "lazyvim.plugins.extras.ai.copilot-native" },
+    { import = "lazyvim.plugins.extras.ai.sidekick" },
     -- import/override with your plugins
     { import = "plugins" },
     { import = "plugins.ai" },

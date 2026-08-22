@@ -16,9 +16,6 @@ vim.g.lazyvim_prettier_needs_config = false
 
 require("config.neovide")
 
--- "github" | "supermaven"
-vim.g.code_copilot = "supermaven"
-
 -- LSP Server to use for Python.
 -- Set to "basedpyright" to use basedpyright instead of pyright.
 vim.g.lazyvim_python_lsp = "pyright"

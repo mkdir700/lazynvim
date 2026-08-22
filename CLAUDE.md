@@ -45,7 +45,7 @@ stylua lua/                    # 格式化 Lua 代码
 - 语言支持：Python、TypeScript、Markdown、JSON、TOML、C#
 - 工具：DAP 调试、测试框架、代码格式化（Prettier、Black）
 - 编辑器：Mini-diff、Outline、重构工具
-- AI：Supermaven 代码补全
+- AI：GitHub Copilot 代码补全和下一处修改建议
 
 ### 自定义插件模块
 - AI 集成：Claude Code、Copilot、ChatGPT
