@@ -2,6 +2,14 @@ return {
   "folke/snacks.nvim",
   opts = {
     bigfile = { enabled = true },
+    terminal = {
+      win = {
+        keys = {
+          hide_slash = false,
+          hide_underscore = false,
+        },
+      },
+    },
     picker = {
       win = {
         input = { keys = { ["<C-w>"] = false } },

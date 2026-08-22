@@ -109,10 +109,9 @@ vim.keymap.set("n", "<leader>we", ":Neotree focus<cr>", { desc = "Focus Neotree"
 local term = require("util.terminal")
 term.setup()
 
-map({ "n", "t" }, "<c-_>", function()
-  term.toggle()
-end, { desc = "which_key_ignore" })
-map({ "n", "t" }, "<c-/>", function()
+vim.keymap.del({ "n", "t" }, "<c-/>")
+vim.keymap.del({ "n", "t" }, "<c-_>")
+map({ "n", "t" }, "<C-`>", function()
   term.toggle()
 end, { desc = "Terminal (cwd)" })
 map("n", "<leader>ft", function()
