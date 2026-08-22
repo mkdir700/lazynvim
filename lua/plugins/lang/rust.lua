@@ -10,6 +10,7 @@ return {
     version = "^6",
     lazy = false,
     init = function()
+      rust.setup_diagnostic_reload()
       vim.g.rustaceanvim = {
         tools = {
           check = { command = "check" },
