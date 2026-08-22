@@ -2,6 +2,13 @@ return {
   "folke/snacks.nvim",
   opts = {
     bigfile = { enabled = true },
+    input = {
+      win = {
+        relative = "cursor",
+        row = -3,
+        col = 0,
+      },
+    },
     terminal = {
       win = {
         keys = {
