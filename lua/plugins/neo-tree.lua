@@ -5,7 +5,7 @@ return {
     popup_border_style = "rounded",
     source_selector = {
       winbar = true,
-      statusline = true,
+      statusline = false,
     },
     window = {
       mappings = {
