@@ -2,8 +2,13 @@
 return {
   "willothy/flatten.nvim",
   opts = {
+    hooks = {
+      no_files = function()
+        return true
+      end,
+    },
     window = {
-      open = "alternate"
-    }
-  }
+      open = "alternate",
+    },
+  },
 }

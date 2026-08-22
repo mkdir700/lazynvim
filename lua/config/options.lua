@@ -42,7 +42,7 @@ end
 
 vim.cmd([[
 set tagfunc=v:lua.vim.lsp.tagfunc
-set jumpoptions+=stack
+set jumpoptions+=stack,clean
 ]])
 
 vim.g.snacks_animate = true
