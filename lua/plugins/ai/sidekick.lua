@@ -8,8 +8,11 @@ return {
         },
       },
       mux = {
-        backend = "zellij",
+        backend = "tmux",
         enabled = true,
+      },
+      tools = {
+        codex = { cmd = { "codex", "--dangerously-bypass-approvals-and-sandbox" } },
       },
       prompts = {
         gen_commit_message = require("plugins.ai.prompts.gen_commit_message").prompt,
@@ -91,13 +94,13 @@ return {
       mode = { "n", "x" },
       desc = "Sidekick Select Prompt",
     },
-    -- Example of a keybinding to open Claude directly
+    -- Open Codex directly
     {
       "<leader>ac",
       function()
-        require("sidekick.cli").toggle({ name = "claude", focus = true })
+        require("sidekick.cli").toggle({ name = "codex", focus = true })
       end,
-      desc = "Sidekick Toggle Claude",
+      desc = "Sidekick Toggle Codex",
     },
   },
 }
