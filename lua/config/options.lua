@@ -25,6 +25,21 @@ vim.g.lazyvim_python_lsp = "pyright"
 -- Set to "ruff_lsp" to use the old LSP implementation version.
 vim.g.lazyvim_python_ruff = "ruff"
 
+-- Neovim 0.12 can try to underline stale diagnostics past the end of a reloaded file.
+-- This mirrors the upstream 0.13 fix and can be removed once 0.12 is no longer supported.
+if vim.fn.has("nvim-0.13") == 0 then
+  local underline = vim.diagnostic.handlers.underline
+  local show = underline.show
+
+  underline.show = function(namespace, bufnr, diagnostics, opts)
+    local line_count = vim.api.nvim_buf_line_count(bufnr)
+    diagnostics = vim.tbl_filter(function(diagnostic)
+      return diagnostic.lnum < line_count
+    end, diagnostics)
+    show(namespace, bufnr, diagnostics, opts)
+  end
+end
+
 vim.cmd([[
 set tagfunc=v:lua.vim.lsp.tagfunc
 set jumpoptions+=stack
