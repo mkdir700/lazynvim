@@ -10,6 +10,27 @@ return {
     },
   },
   keys = {
+    {
+      "<leader>sf",
+      LazyVim.pick("files", {
+        root = false,
+        pattern = function(picker)
+          return picker:word()
+        end,
+      }),
+      desc = "Find Files (cwd)",
+      mode = "x",
+    },
+    {
+      "<leader>sF",
+      LazyVim.pick("files", {
+        pattern = function(picker)
+          return picker:word()
+        end,
+      }),
+      desc = "Find Files (Root Dir)",
+      mode = "x",
+    },
     { "<leader>sW", LazyVim.pick("grep_word"), desc = "Visual selection or word (Root Dir)", mode = { "n", "x" } },
     {
       "<leader>sw",
