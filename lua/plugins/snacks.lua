@@ -26,6 +26,13 @@ return {
   },
   keys = {
     {
+      "<leader>fr",
+      function()
+        require("util.recently_created").open()
+      end,
+      desc = "Recent",
+    },
+    {
       "<leader>sf",
       LazyVim.pick("files", {
         root = false,
