@@ -1,4 +1,4 @@
-describe("Rust diagnostics after an external reload", function()
+describe("Rust compiler check scheduler", function()
   local original_get_clients
   local bufnr
   local diagnostic_namespace
@@ -23,7 +23,7 @@ describe("Rust diagnostics after an external reload", function()
   end)
 
   after_each(function()
-    pcall(vim.api.nvim_del_augroup_by_name, "rust_diagnostics_external_reload")
+    pcall(vim.api.nvim_del_augroup_by_name, "rust_check_scheduler")
     if vim.api.nvim_buf_is_valid(bufnr) then
       vim.api.nvim_buf_delete(bufnr, { force = true })
     end
@@ -32,7 +32,7 @@ describe("Rust diagnostics after an external reload", function()
     pcall(vim.api.nvim_del_user_command, "RustLsp")
   end)
 
-  it("clears and reruns the compiler check for the reloaded Rust buffer", function()
+  local function setup_commands()
     local commands = {}
     local callback_buffers = {}
     vim.lsp.get_clients = function(opts)
@@ -46,11 +46,50 @@ describe("Rust diagnostics after an external reload", function()
       callback_buffers[#callback_buffers + 1] = vim.api.nvim_get_current_buf()
     end, { nargs = "+" })
 
-    require("config.lang.rust").setup_diagnostic_reload()
+    return commands, callback_buffers
+  end
+
+  it("debounces repeated saves into one compiler check", function()
+    local commands, callback_buffers = setup_commands()
+
+    require("config.lang.rust").setup_check_scheduler(20)
+    vim.api.nvim_exec_autocmds("BufWritePost", { buffer = bufnr, modeline = false })
+    vim.api.nvim_exec_autocmds("BufWritePost", { buffer = bufnr, modeline = false })
+
+    assert.are.same({}, commands)
+    assert.is_true(vim.wait(200, function()
+      return #commands == 1
+    end))
+    assert.are.same({ "run" }, commands)
+    assert.are.same({ bufnr }, callback_buffers)
+  end)
+
+  it("cancels a running check when editing resumes", function()
+    local commands = setup_commands()
+
+    require("config.lang.rust").setup_check_scheduler(10)
+    vim.api.nvim_exec_autocmds("BufWritePost", { buffer = bufnr, modeline = false })
+    assert.is_true(vim.wait(200, function()
+      return #commands == 1
+    end))
+
+    vim.api.nvim_exec_autocmds("TextChanged", { buffer = bufnr, modeline = false })
+
+    assert.are.same({ "run", "cancel" }, commands)
+  end)
+
+  it("clears stale diagnostics and debounces an external reload", function()
+    local commands, callback_buffers = setup_commands()
+
+    require("config.lang.rust").setup_check_scheduler(20)
     vim.api.nvim_exec_autocmds("FileChangedShellPost", { buffer = bufnr, modeline = false })
 
-    assert.are.same({ "clear", "run" }, commands)
-    assert.are.same({ bufnr, bufnr }, callback_buffers)
     assert.are.same({}, vim.diagnostic.get(bufnr, { namespace = diagnostic_namespace }))
+    assert.are.same({}, commands)
+    assert.is_true(vim.wait(200, function()
+      return #commands == 1
+    end))
+    assert.are.same({ "run" }, commands)
+    assert.are.same({ bufnr }, callback_buffers)
   end)
 end)

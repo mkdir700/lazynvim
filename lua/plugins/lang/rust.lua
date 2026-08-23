@@ -10,7 +10,7 @@ return {
     version = "^6",
     lazy = false,
     init = function()
-      rust.setup_diagnostic_reload()
+      rust.setup_check_scheduler()
       vim.g.rustaceanvim = {
         tools = {
           check = { command = "check" },
@@ -18,8 +18,12 @@ return {
         server = {
           settings = {
             ["rust-analyzer"] = {
+              checkOnSave = false,
               check = {
                 command = "check",
+                extraEnv = {
+                  RUSTC_WRAPPER = "",
+                },
               },
             },
           },
