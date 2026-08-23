@@ -11,7 +11,7 @@ return {
       position = "float",
       popup = {
         size = {
-          height = "100%",
+          height = "90%",
         },
         title = "",
       },

@@ -18,9 +18,9 @@ describe("neo-tree appearance", function()
     assert.equals("float", spec.opts.window.position)
   end)
 
-  it("uses the full available height", function()
+  it("uses 90 percent of the available height", function()
     local spec = dofile(vim.fn.getcwd() .. "/lua/plugins/neo-tree.lua")
 
-    assert.equals("100%", spec.opts.window.popup.size.height)
+    assert.equals("90%", spec.opts.window.popup.size.height)
   end)
 end)
