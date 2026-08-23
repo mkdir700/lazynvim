@@ -8,6 +8,13 @@ return {
       statusline = false,
     },
     window = {
+      position = "float",
+      popup = {
+        size = {
+          height = "100%",
+        },
+        title = "",
+      },
       mappings = {
         ["<Tab>"] = "focus_preview",
         ["l"] = "open",
