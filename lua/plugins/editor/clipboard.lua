@@ -12,6 +12,16 @@ return {
           end,
           desc = "Open Yank History",
         },
+        {
+          "p",
+          function()
+            if not require("util.smart_paste").into_empty_braces() then
+              require("yanky").put("p", false)
+            end
+          end,
+          mode = "n",
+          desc = "Put text after cursor",
+        },
         { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
         -- { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after selection" },
         -- { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before selection" },

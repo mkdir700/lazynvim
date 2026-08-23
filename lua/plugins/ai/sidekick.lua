@@ -6,10 +6,21 @@ return {
         split = {
           width = 60,
         },
+        keys = {
+          stopinsert_ctrl_u = {
+            "<c-u>",
+            "stopinsert",
+            mode = "t",
+            desc = "Enter normal mode",
+          },
+        },
       },
       mux = {
-        backend = "zellij",
+        backend = "tmux",
         enabled = true,
+      },
+      tools = {
+        codex = { cmd = { "codex", "--dangerously-bypass-approvals-and-sandbox" } },
       },
       prompts = {
         gen_commit_message = require("plugins.ai.prompts.gen_commit_message").prompt,
@@ -19,14 +30,10 @@ return {
   },
   keys = {
     {
-      "<tab>",
+      "<leader>an",
       function()
-        -- if there is a next edit, jump to it, otherwise apply it if any
-        if not require("sidekick").nes_jump_or_apply() then
-          return "<Tab>" -- fallback to normal tab
-        end
+        require("sidekick").nes_jump_or_apply()
       end,
-      expr = true,
       desc = "Goto/Apply Next Edit Suggestion",
     },
     -- {
@@ -91,13 +98,13 @@ return {
       mode = { "n", "x" },
       desc = "Sidekick Select Prompt",
     },
-    -- Example of a keybinding to open Claude directly
+    -- Open Codex directly
     {
       "<leader>ac",
       function()
-        require("sidekick.cli").toggle({ name = "claude", focus = true })
+        require("sidekick.cli").toggle({ name = "codex", focus = true })
       end,
-      desc = "Sidekick Toggle Claude",
+      desc = "Sidekick Toggle Codex",
     },
   },
 }

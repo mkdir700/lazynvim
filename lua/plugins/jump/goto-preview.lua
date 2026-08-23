@@ -3,8 +3,10 @@ return {
   keys = {
     {
       "gp",
-      "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
-      desc = "Goto Preview Definition",
+      function()
+        require("config.goto_preview").goto_preview()
+      end,
+      desc = "Preview File or Definition",
     },
   },
   config = function()

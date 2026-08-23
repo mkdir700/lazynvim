@@ -106,19 +106,20 @@ end
 vim.keymap.set("n", "<leader>we", ":Neotree focus<cr>", { desc = "Focus Neotree" })
 
 -- terminal
-map({ "n", "t" }, "<c-_>", function()
-  Snacks.terminal()
-end, { desc = "which_key_ignore" })
-map({ "n", "t" }, "<c-/>", function()
-  Snacks.terminal()
+local term = require("util.terminal")
+term.setup()
+
+vim.keymap.del({ "n", "t" }, "<c-/>")
+vim.keymap.del({ "n", "t" }, "<c-_>")
+map({ "n", "t" }, "<C-`>", function()
+  term.toggle()
 end, { desc = "Terminal (cwd)" })
 map("n", "<leader>ft", function()
-  Snacks.terminal()
+  term.toggle()
 end, { desc = "Terminal (cwd)" })
 map("n", "<leader>fT", function()
   Snacks.terminal(nil, { cwd = LazyVim.root() })
 end, { desc = "Terminal (Root Dir)" })
-
 
 vim.keymap.set("v", "<leader>cp", function()
   local path = vim.fn.expand("%")

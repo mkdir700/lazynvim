@@ -2,11 +2,19 @@ return {
   "nvim-neo-tree/neo-tree.nvim",
   dependencies = { "s1n7ax/nvim-window-picker" },
   opts = {
+    popup_border_style = "rounded",
     source_selector = {
       winbar = true,
-      statusline = true,
+      statusline = false,
     },
     window = {
+      position = "float",
+      popup = {
+        size = {
+          height = "90%",
+        },
+        title = "",
+      },
       mappings = {
         ["<Tab>"] = "focus_preview",
         ["l"] = "open",

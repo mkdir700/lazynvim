@@ -14,24 +14,7 @@ vim.o.swapfile = false
 -- If no prettier config file is found, the formatter will not be used
 vim.g.lazyvim_prettier_needs_config = false
 
--- neovide options
-vim.g.neovide_cursor_animation_length = 0.03
-vim.g.neovide_cursor_trail_length = 0.2
-vim.g.neovide_cursor_antialiasing = true
-vim.g.neovide_cursor_vfx_mode = "railgun"
-vim.g.neovide_cursor_vfx_mode = "ripple"
-vim.g.neovide_cursor_animate_command_line = true
-vim.g.neovide_cursor_unfocused_outline_width = 0.125
-
--- neovide - window
-vim.g.neovide_window_blurred = true
-vim.g.neovide_opacity = 0.95
--- vim.g.transparency = 0.8
--- vim.g.neovide_background_color = "#0f1117" .. alpha()
-vim.g.experimental_layer_grouping = false
-
--- "github" | "supermaven"
-vim.g.code_copilot = "github"
+require("config.neovide")
 
 -- LSP Server to use for Python.
 -- Set to "basedpyright" to use basedpyright instead of pyright.
@@ -39,9 +22,24 @@ vim.g.lazyvim_python_lsp = "pyright"
 -- Set to "ruff_lsp" to use the old LSP implementation version.
 vim.g.lazyvim_python_ruff = "ruff"
 
+-- Neovim 0.12 can try to underline stale diagnostics past the end of a reloaded file.
+-- This mirrors the upstream 0.13 fix and can be removed once 0.12 is no longer supported.
+if vim.fn.has("nvim-0.13") == 0 then
+  local underline = vim.diagnostic.handlers.underline
+  local show = underline.show
+
+  underline.show = function(namespace, bufnr, diagnostics, opts)
+    local line_count = vim.api.nvim_buf_line_count(bufnr)
+    diagnostics = vim.tbl_filter(function(diagnostic)
+      return diagnostic.lnum < line_count
+    end, diagnostics)
+    show(namespace, bufnr, diagnostics, opts)
+  end
+end
+
 vim.cmd([[
 set tagfunc=v:lua.vim.lsp.tagfunc
-set jumpoptions+=stack
+set jumpoptions+=stack,clean
 ]])
 
 vim.g.snacks_animate = true
