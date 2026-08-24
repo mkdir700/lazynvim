@@ -166,6 +166,13 @@ return {
       desc = "Send File",
     },
     {
+      "<leader>ai",
+      function()
+        require("sidekick.cli").send({ prompt = "diagnostics" })
+      end,
+      desc = "Insert Diagnostics",
+    },
+    {
       "<leader>av",
       function()
         require("sidekick.cli").send({ msg = "{selection}" })
