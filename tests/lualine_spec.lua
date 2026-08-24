@@ -2,7 +2,7 @@ describe("lualine appearance", function()
   local status
 
   before_each(function()
-    vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/lazy/kanagawa.nvim")
+    vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/lazy/everforest")
     status = {
       setup = function()
         return true
@@ -40,6 +40,7 @@ describe("lualine appearance", function()
 
     spec.opts(nil, opts)
 
+    assert.are.equal("everforest", opts.options.theme)
     assert.are.same({ left = "", right = "" }, opts.options.section_separators)
     assert.are.same({ left = "", right = "" }, opts.options.component_separators)
     assert.are.equal(2, #opts.sections.lualine_x)

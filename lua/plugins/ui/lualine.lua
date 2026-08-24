@@ -4,14 +4,15 @@ return {
     local input_method = require("util.input_method_status")
     input_method.setup()
 
-    opts.options.theme = "kanagawa"
+    opts.options.theme = "everforest"
     opts.options.component_separators = { left = "", right = "" }
     opts.options.section_separators = { left = "", right = "" }
     opts.extensions = vim.tbl_filter(function(extension)
       return extension ~= "neo-tree"
     end, opts.extensions or {})
 
-    local colors = require("kanagawa.colors").setup({ theme = "wave" }).palette
+    local configuration = vim.fn["everforest#get_configuration"]()
+    local colors = vim.fn["everforest#get_palette"](configuration.background, configuration.colors_override)
     table.insert(opts.sections.lualine_x, 1, {
       input_method.component,
       icon = "",
@@ -20,8 +21,8 @@ return {
       end,
       color = function()
         return {
-          fg = input_method.is_chinese() and colors.carpYellow or colors.springGreen,
-          bg = colors.sumiInk5,
+          fg = (input_method.is_chinese() and colors.yellow or colors.green)[1],
+          bg = colors.bg3[1],
           gui = "bold",
         }
       end,

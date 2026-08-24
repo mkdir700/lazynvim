@@ -2,13 +2,14 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "kanagawa-wave",
+      colorscheme = "everforest",
     },
   },
   {
-    "rebelot/kanagawa.nvim",
-    opts = {
-      dimInactive = true, -- 暗化非活动窗口
-    },
+    "sainnhe/everforest",
+    init = function()
+      vim.g.everforest_background = "medium"
+      vim.g.everforest_dim_inactive_windows = 1
+    end,
   },
 }
