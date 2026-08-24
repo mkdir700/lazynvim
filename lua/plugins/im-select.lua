@@ -29,18 +29,52 @@ return {
           default_command = "fcitx5-remote",
         })
       elseif platform == "mac" then
+        local desired_input_method
+        local running_input_method
+        local request_id = 0
+
+        local function apply_input_method()
+          if running_input_method or not desired_input_method then
+            return
+          end
+
+          local input_method = desired_input_method
+          running_input_method = input_method
+          vim.system({ "macism", input_method }, {}, function()
+            vim.schedule(function()
+              running_input_method = nil
+              if desired_input_method ~= input_method then
+                apply_input_method()
+              end
+            end)
+          end)
+        end
+
         local function switch_input_method(input_method)
-          vim.system({ "macism", input_method })
+          desired_input_method = input_method
+          request_id = request_id + 1
+          local current_request = request_id
+          vim.defer_fn(function()
+            if current_request == request_id then
+              apply_input_method()
+            end
+          end, 20)
         end
 
         require("im_select").setup({
           default_im_select = "com.apple.keylayout.ABC",
           default_command = "macism",
-          set_default_events = { "InsertLeave", "CmdlineLeave", "VimEnter" },
+          set_default_events = {},
           set_previous_events = {},
         })
 
         local group = vim.api.nvim_create_augroup("rime_insert_mode", { clear = true })
+        vim.api.nvim_create_autocmd({ "InsertLeave", "CmdlineLeave", "VimEnter" }, {
+          group = group,
+          callback = function()
+            switch_input_method("com.apple.keylayout.ABC")
+          end,
+        })
         vim.keymap.set("i", "vswf", function()
           switch_input_method("im.rime.inputmethod.Squirrel.Hans")
         end, {
