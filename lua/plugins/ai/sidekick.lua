@@ -7,6 +7,17 @@ return {
           width = 60,
         },
         keys = {
+          select_session = {
+            "<c-s>",
+            function()
+              vim.cmd.stopinsert()
+              vim.schedule(function()
+                require("util.sidekick_sessions").select()
+              end)
+            end,
+            mode = { "n", "t" },
+            desc = "Select CLI Session",
+          },
           stopinsert_ctrl_u = {
             "<c-u>",
             "stopinsert",
@@ -54,11 +65,9 @@ return {
     {
       "<leader>as",
       function()
-        require("sidekick.cli").select()
+        require("util.sidekick_sessions").select()
       end,
-      -- Or to select only installed tools:
-      -- require("sidekick.cli").select({ filter = { installed = true } })
-      desc = "Select CLI",
+      desc = "Select CLI Session",
     },
     {
       "<leader>ad",
@@ -102,9 +111,16 @@ return {
     {
       "<leader>ac",
       function()
-        require("sidekick.cli").toggle({ name = "codex", focus = true })
+        require("util.sidekick_sessions").toggle_codex()
       end,
       desc = "Sidekick Toggle Codex",
+    },
+    {
+      "<leader>aC",
+      function()
+        require("util.sidekick_sessions").new_codex()
+      end,
+      desc = "Sidekick New Codex Session",
     },
   },
 }
