@@ -1,5 +1,9 @@
 local M = {}
 
+local function looks_like_file_reference(value)
+  return value:find("[/\\]") ~= nil or value:match("%.[%w_-]+$") ~= nil
+end
+
 local function position_on_file_before_line_number(win)
   local cursor = vim.api.nvim_win_get_cursor(win)
   local line = vim.api.nvim_get_current_line()
@@ -28,12 +32,16 @@ function M.resolve_file_under_cursor()
 
   local ok = pcall(vim.api.nvim_win_call, source_win, function()
     position_on_file_before_line_number(source_win)
+    if not looks_like_file_reference(vim.fn.expand("<cfile>")) then
+      return
+    end
     vim.cmd.normal({ args = { "gF" }, bang = true })
     local target_buf = vim.api.nvim_get_current_buf()
     target = {
       buf = target_buf,
       cursor = vim.api.nvim_win_get_cursor(source_win),
       path = vim.fs.normalize(vim.api.nvim_buf_get_name(target_buf)),
+      source_win = source_win,
     }
   end)
 
@@ -50,6 +58,66 @@ function M.resolve_file_under_cursor()
   end
 
   return target
+end
+
+local split_commands = {
+  left = "leftabove vsplit",
+  right = "rightbelow vsplit",
+  above = "leftabove split",
+  below = "rightbelow split",
+}
+
+function M.dock_file_preview(preview, direction)
+  local command = assert(split_commands[direction], "invalid preview direction: " .. tostring(direction))
+  local source_win = preview.source_win
+  if not (source_win and vim.api.nvim_win_is_valid(source_win)) then
+    return
+  end
+
+  local buf = vim.api.nvim_win_get_buf(preview.win)
+  local cursor = vim.api.nvim_win_get_cursor(preview.win)
+  vim.api.nvim_win_close(preview.win, true)
+  vim.api.nvim_set_current_win(source_win)
+  vim.cmd(command)
+  vim.api.nvim_win_set_buf(0, buf)
+  vim.api.nvim_win_set_cursor(0, cursor)
+end
+
+local function attach_dock_keymaps(preview, buf)
+  local keymaps = {
+    H = "left",
+    J = "below",
+    K = "above",
+    L = "right",
+  }
+  for key, direction in pairs(keymaps) do
+    vim.keymap.set("n", "<c-w>" .. key, function()
+      M.dock_file_preview(preview, direction)
+    end, { buffer = buf, desc = "Dock preview " .. direction })
+  end
+
+  vim.api.nvim_create_autocmd("WinClosed", {
+    pattern = tostring(preview.win),
+    once = true,
+    callback = function()
+      if not vim.api.nvim_buf_is_valid(buf) then
+        return
+      end
+      for key in pairs(keymaps) do
+        pcall(vim.keymap.del, "n", "<c-w>" .. key, { buffer = buf })
+      end
+    end,
+  })
+end
+
+function M.attach_definition_preview(buf, win)
+  local preview = {
+    win = win,
+    source_win = M.definition_source_win,
+  }
+  M.definition_source_win = nil
+  attach_dock_keymaps(preview, buf)
+  return preview
 end
 
 function M.open_file_preview(target)
@@ -70,7 +138,10 @@ function M.open_file_preview(target)
     },
   })
 
+  preview.source_win = target.source_win
   vim.api.nvim_win_set_cursor(preview.win, target.cursor)
+  attach_dock_keymaps(preview, target.buf)
+
   return preview
 end
 
@@ -80,6 +151,7 @@ function M.goto_preview()
     return M.open_file_preview(target)
   end
 
+  M.definition_source_win = vim.api.nvim_get_current_win()
   require("goto-preview").goto_preview_definition()
 end
 

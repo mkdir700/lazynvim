@@ -10,6 +10,10 @@ return {
     },
   },
   config = function()
-    require("goto-preview").setup({})
+    require("goto-preview").setup({
+      post_open_hook = function(buf, win)
+        require("config.goto_preview").attach_definition_preview(buf, win)
+      end,
+    })
   end,
 }
