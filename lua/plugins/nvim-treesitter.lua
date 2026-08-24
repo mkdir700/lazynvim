@@ -2,6 +2,16 @@ return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
   event = { "BufReadPre", "BufNewFile" },
+  keys = {
+    {
+      "aC",
+      function()
+        require("util.annotated_declaration").select()
+      end,
+      mode = { "x", "o" },
+      desc = "Annotated declaration",
+    },
+  },
   dependencies = {
     {
       "kana/vim-textobj-user",
