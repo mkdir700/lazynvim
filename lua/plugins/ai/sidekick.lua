@@ -1,12 +1,78 @@
+local sidekick_reader_root = "/Users/mark/MyProjects/sidekick-reader.nvim"
+local sidekick_reader_registry = vim.fs.joinpath(vim.fn.stdpath("state"), "hajimi")
+
 return {
   "folke/sidekick.nvim",
   opts = {
     cli = {
       win = {
+        config = function(terminal)
+          if terminal._sidekick_reader_wrapped then
+            return
+          end
+          terminal._sidekick_reader_wrapped = true
+          local original_show = terminal.show
+          local original_hide = terminal.hide
+          local original_close = terminal.close
+
+          local function pane(self)
+            local resolver = require("util.sidekick_reader")
+            self._sidekick_reader_pane_id = self._sidekick_reader_pane_id
+              or resolver.terminal_pane(self)
+              or resolver.active_pane(sidekick_reader_registry)
+            return self._sidekick_reader_pane_id
+          end
+
+          terminal.show = function(self, ...)
+            local result = original_show(self, ...)
+            local pane_id = pane(self)
+            if pane_id and self.win then
+              require("sidekick_reader").sidekick_show(pane_id, self.win, self)
+            end
+            return result
+          end
+          terminal.hide = function(self, ...)
+            local pane_id = pane(self)
+            if pane_id then
+              require("sidekick_reader").sidekick_hide(pane_id)
+            end
+            return original_hide(self, ...)
+          end
+          terminal.close = function(self, ...)
+            local pane_id = pane(self)
+            if pane_id then
+              require("sidekick_reader").sidekick_close(pane_id)
+            end
+            return original_close(self, ...)
+          end
+        end,
         split = {
           width = 60,
         },
         keys = {
+          sidekick_reader_toggle = {
+            "<C-]>",
+            function()
+              local pane = require("util.sidekick_reader").active_pane(sidekick_reader_registry)
+              if not pane then
+                return vim.notify("Sidekick Reader: cannot resolve this Sidekick Codex session", vim.log.levels.WARN)
+              end
+              local current = vim.api.nvim_get_current_win()
+              local terminal
+              local ok, states = pcall(require("sidekick.cli.state").get, { attached = true, name = "codex" })
+              if ok then
+                for _, state in ipairs(states) do
+                  if state.terminal and state.terminal.win == current then
+                    terminal = state.terminal
+                    break
+                  end
+                end
+              end
+              require("sidekick_reader").focus(pane, current, terminal)
+            end,
+            mode = { "n", "t" },
+            desc = "Focus Sidekick Reader",
+          },
           select_session = {
             "<c-s>",
             function()
@@ -31,7 +97,15 @@ return {
         enabled = true,
       },
       tools = {
-        codex = { cmd = { "codex", "--dangerously-bypass-approvals-and-sandbox" } },
+        codex = {
+          cmd = {
+            "node",
+            vim.fs.joinpath(sidekick_reader_root, "scripts", "bridge.mjs"),
+            "launch",
+            "--dangerously-bypass-approvals-and-sandbox",
+          },
+          env = { SIDEKICK_READER_REGISTRY_DIR = sidekick_reader_registry },
+        },
       },
       prompts = {
         gen_commit_message = require("plugins.ai.prompts.gen_commit_message").prompt,
