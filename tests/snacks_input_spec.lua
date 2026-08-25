@@ -1,4 +1,35 @@
 describe("input popup placement", function()
+  it("uses alt-a in insert mode and leader af in normal mode", function()
+    local original_lazyvim = _G.LazyVim
+    local original_picker = package.loaded["sidekick.cli.picker.snacks"]
+    local received
+    _G.LazyVim = {
+      pick = function()
+        return function() end
+      end,
+    }
+    package.loaded["sidekick.cli.picker.snacks"] = {
+      send = function(picker)
+        received = picker
+      end,
+    }
+
+    local spec = dofile(vim.fn.getcwd() .. "/lua/plugins/snacks.lua")
+    local action = spec.opts.picker.actions.sidekick_send
+    local mapping = spec.opts.picker.win.input.keys["<a-a>"]
+    local leader_mapping = spec.opts.picker.win.input.keys["<leader>af"]
+    local list_mapping = spec.opts.picker.win.list.keys["<leader>af"]
+    action("picker")
+
+    package.loaded["sidekick.cli.picker.snacks"] = original_picker
+    _G.LazyVim = original_lazyvim
+
+    assert.equals("picker", received)
+    assert.same({ "sidekick_send", mode = "i" }, mapping)
+    assert.same({ "sidekick_send", mode = "n" }, leader_mapping)
+    assert.equals("sidekick_send", list_mapping)
+  end)
+
   it("opens above the symbol under the cursor", function()
     local original_lazyvim = _G.LazyVim
     _G.LazyVim = {

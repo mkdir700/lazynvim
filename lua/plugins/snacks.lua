@@ -19,6 +19,9 @@ return {
     },
     picker = {
       actions = {
+        sidekick_send = function(...)
+          return require("sidekick.cli.picker.snacks").send(...)
+        end,
         flash = function(picker)
           require("flash").jump({
             pattern = "^",
@@ -55,8 +58,19 @@ return {
         end,
       },
       win = {
-        input = { keys = { ["<C-w>"] = false } },
-        list = { keys = { ["<C-w>"] = false } },
+        input = {
+          keys = {
+            ["<C-w>"] = false,
+            ["<a-a>"] = { "sidekick_send", mode = "i" },
+            ["<leader>af"] = { "sidekick_send", mode = "n" },
+          },
+        },
+        list = {
+          keys = {
+            ["<C-w>"] = false,
+            ["<leader>af"] = "sidekick_send",
+          },
+        },
       },
     },
   },

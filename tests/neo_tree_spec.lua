@@ -1,4 +1,33 @@
 describe("neo-tree appearance", function()
+  it("sends the current or selected files to Sidekick with leader af", function()
+    local original_sender = package.loaded["util.sidekick_files"]
+    local received
+    package.loaded["util.sidekick_files"] = {
+      send = function(paths)
+        received = paths
+      end,
+    }
+
+    local spec = dofile(vim.fn.getcwd() .. "/lua/plugins/neo-tree.lua")
+    local current = { path = "/tmp/current.lua", type = "file" }
+    spec.opts.commands.sidekick_send({ tree = {
+      get_node = function()
+        return current
+      end,
+    } })
+    assert.same({ "/tmp/current.lua" }, received)
+
+    spec.opts.commands.sidekick_send_visual(nil, {
+      { path = "/tmp/a.lua", type = "file" },
+      { path = "/tmp/folder", type = "directory" },
+      { path = "/tmp/b.lua", type = "file" },
+    })
+    assert.same({ "/tmp/a.lua", "/tmp/b.lua" }, received)
+    assert.equals("sidekick_send", spec.opts.window.mappings["<leader>af"])
+
+    package.loaded["util.sidekick_files"] = original_sender
+  end)
+
   it("leaves the statusline to lualine", function()
     local spec = dofile(vim.fn.getcwd() .. "/lua/plugins/neo-tree.lua")
 

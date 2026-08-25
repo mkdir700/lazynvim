@@ -2,6 +2,22 @@ return {
   "nvim-neo-tree/neo-tree.nvim",
   dependencies = { "s1n7ax/nvim-window-picker" },
   opts = {
+    commands = {
+      sidekick_send = function(state)
+        local node = state.tree:get_node()
+        local paths = node and node.type == "file" and { node.path } or {}
+        require("util.sidekick_files").send(paths)
+      end,
+      sidekick_send_visual = function(_, nodes)
+        local paths = {}
+        for _, node in ipairs(nodes or {}) do
+          if node.type == "file" then
+            paths[#paths + 1] = node.path
+          end
+        end
+        require("util.sidekick_files").send(paths)
+      end,
+    },
     popup_border_style = "rounded",
     source_selector = {
       winbar = true,
@@ -16,6 +32,7 @@ return {
         title = "",
       },
       mappings = {
+        ["<leader>af"] = "sidekick_send",
         ["<Tab>"] = "focus_preview",
         ["l"] = "open",
         ["S"] = "none",
