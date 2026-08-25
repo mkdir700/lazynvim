@@ -1,8 +1,23 @@
-local sidekick_reader_root = "/Users/mark/MyProjects/sidekick-reader.nvim"
+local sidekick_reader_local_root = "/Users/mark/MyProjects/sidekick-reader.nvim"
+local sidekick_reader_root = vim.uv.fs_stat(sidekick_reader_local_root) and sidekick_reader_local_root
+  or vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "sidekick-reader.nvim")
 local sidekick_reader_registry = vim.fs.joinpath(vim.fn.stdpath("state"), "hajimi")
 
 return {
   "folke/sidekick.nvim",
+  dependencies = {
+    {
+      "mkdir700/sidekick-reader.nvim",
+      dir = vim.uv.fs_stat(sidekick_reader_local_root) and sidekick_reader_local_root or nil,
+      dependencies = {
+        "MunifTanjim/nui.nvim",
+        "sindrets/diffview.nvim",
+      },
+      config = function()
+        require("sidekick_reader").setup({ registry_dir = sidekick_reader_registry })
+      end,
+    },
+  },
   opts = {
     cli = {
       win = {
