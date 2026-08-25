@@ -1,4 +1,8 @@
 local function getPlatform()
+  if vim.fn.has("wsl") == 1 then
+    return "wsl"
+  end
+
   local uname = vim.loop.os_uname()
   if uname.sysname == "Linux" then
     return "linux"
@@ -17,13 +21,20 @@ return {
   {
     "keaising/im-select.nvim",
     cond = function()
-      -- 检查环境变量 SSH_TTY 是否存在
-      return not os.getenv("SSH_TTY") and not os.getenv("WSL_DISTRO_NAME")
+      return not os.getenv("SSH_TTY")
     end,
     config = function()
       -- 判断当前平台是否为 linux
       local platform = getPlatform()
-      if platform == "linux" then
+      if platform == "wsl" then
+        require("im_select").setup({
+          -- Keep Microsoft Pinyin selected and switch its internal mode instead.
+          -- This works even when Windows has no separate US keyboard layout.
+          default_im_select = "0",
+          default_command = { "AIMSwitcher.exe", "--imm" },
+          keep_quiet_on_no_binary = true,
+        })
+      elseif platform == "linux" then
         require("im_select").setup({
           default_im_select = "keyboard-us",
           default_command = "fcitx5-remote",

@@ -52,6 +52,13 @@ local function read_rime_mode(input_method)
 end
 
 local function find_command()
+  if
+    (vim.fn.has("wsl") == 1 or vim.fn.has("win32") == 1)
+    and vim.fn.executable("AIMSwitcher.exe") == 1
+  then
+    return { "AIMSwitcher.exe", "--imm" }
+  end
+
   local candidates = {
     { executable = "macism", command = { "macism" } },
     { executable = "fcitx5-remote", command = { "fcitx5-remote", "-n" } },
@@ -74,6 +81,14 @@ function M.label(input_method, rime_mode)
 
   if name:find("squirrel", 1, true) or name:find("rime", 1, true) then
     return rime_mode == "ascii" and "EN" or "中"
+  end
+
+  if name == "0" then
+    return "EN"
+  end
+
+  if name == "1025" then
+    return "中"
   end
 
   if
