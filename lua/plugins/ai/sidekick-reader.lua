@@ -1,4 +1,4 @@
-if vim.env.NVIM_ENABLE_SIDEKICK_READER ~= "1" then
+if vim.env.NVIM_ENABLE_SIDEKICK_READER == "0" then
   return {}
 end
 
@@ -21,7 +21,11 @@ return {
       "MunifTanjim/nui.nvim",
       "sindrets/diffview.nvim",
     },
-    opts = { registry_dir = registry },
+    opts = {
+      registry_dir = registry,
+      layout = "stacked",
+      viewer_ratio = 0.8,
+    },
   },
   {
     "folke/sidekick.nvim",
