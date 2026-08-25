@@ -49,6 +49,8 @@ nvim
 - Neovide：建议安装 `JetVictor Mono`，否则修改
   [`lua/config/neovide.lua`](lua/config/neovide.lua) 中的字体。
 - AI：安装需要使用的命令行助手；直接打开 Codex 还需要本机存在 `codex` 命令。
+- Sidekick Reader：设置 `NVIM_ENABLE_SIDEKICK_READER=1` 后启用；开发本地版本时可通过
+  `SIDEKICK_READER_DIR` 指定插件目录。
 - 输入法状态：macOS 安装 `macism`；Linux 使用 `fcitx5-remote`、`ibus` 或 `im-select` 之一。没有这些工具时，状态栏会自动隐藏该段。
 
 Squirrel/Rime 的英文和中文内部模式使用同一个 macOS 输入源，若要在状态栏中精确区分 `EN` 和 `中`，还需要在本机 Rime 配置中启用对应的状态导出脚本。

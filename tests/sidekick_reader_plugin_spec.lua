@@ -1,16 +1,34 @@
 describe("Sidekick Reader plugin source", function()
-  it("prefers the local checkout while retaining the public repository", function()
-    local sidekick = dofile(vim.fn.getcwd() .. "/lua/plugins/ai/sidekick.lua")
-    local reader
+  local enable
+  local reader_dir
 
-    for _, dependency in ipairs(sidekick.dependencies or {}) do
-      if dependency[1] == "mkdir700/sidekick-reader.nvim" then
-        reader = dependency
-        break
-      end
-    end
+  before_each(function()
+    enable = vim.env.NVIM_ENABLE_SIDEKICK_READER
+    reader_dir = vim.env.SIDEKICK_READER_DIR
+  end)
 
-    assert.is_not_nil(reader)
-    assert.equals("/Users/mark/MyProjects/sidekick-reader.nvim", reader.dir)
+  after_each(function()
+    vim.env.NVIM_ENABLE_SIDEKICK_READER = enable
+    vim.env.SIDEKICK_READER_DIR = reader_dir
+  end)
+
+  it("does not change Sidekick unless explicitly enabled", function()
+    vim.env.NVIM_ENABLE_SIDEKICK_READER = nil
+
+    local specs = dofile(vim.fn.getcwd() .. "/lua/plugins/ai/sidekick-reader.lua")
+
+    assert.same({}, specs)
+  end)
+
+  it("uses an optional local checkout behind its own plugin spec", function()
+    vim.env.NVIM_ENABLE_SIDEKICK_READER = "1"
+    vim.env.SIDEKICK_READER_DIR = "/tmp/sidekick-reader.nvim"
+
+    local specs = dofile(vim.fn.getcwd() .. "/lua/plugins/ai/sidekick-reader.lua")
+
+    assert.equals("mkdir700/sidekick-reader.nvim", specs[1][1])
+    assert.equals("/tmp/sidekick-reader.nvim", specs[1].dir)
+    assert.equals("folke/sidekick.nvim", specs[2][1])
+    assert.same({ "mkdir700/sidekick-reader.nvim" }, specs[2].dependencies)
   end)
 end)
