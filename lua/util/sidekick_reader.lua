@@ -47,7 +47,7 @@ function M.active_pane(registry_dir)
     for _, state in ipairs(states) do
       if state.terminal and state.terminal.buf == current and state.session then
         local session = state.session.parent or state.session
-        return session.tmux_pane_id or (session.pane_id and session:pane_id())
+        return session.tmux_pane_id
       end
     end
   end
@@ -66,7 +66,7 @@ function M.terminal_pane(terminal)
   for _, state in ipairs(states) do
     if state.terminal == terminal and state.session then
       local session = state.session.parent or state.session
-      return session.tmux_pane_id or (session.pane_id and session:pane_id())
+      return session.tmux_pane_id
     end
   end
 end
