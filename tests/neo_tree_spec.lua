@@ -1,5 +1,5 @@
 describe("neo-tree appearance", function()
-  it("sends the current or selected files to Sidekick with leader af", function()
+  it("sends the current or selected paths to Sidekick with leader af", function()
     local original_sender = package.loaded["util.sidekick_files"]
     local received
     package.loaded["util.sidekick_files"] = {
@@ -17,12 +17,20 @@ describe("neo-tree appearance", function()
     } })
     assert.same({ "/tmp/current.lua" }, received)
 
+    current = { path = "/tmp/current-dir", type = "directory" }
+    spec.opts.commands.sidekick_send({ tree = {
+      get_node = function()
+        return current
+      end,
+    } })
+    assert.same({ "/tmp/current-dir" }, received)
+
     spec.opts.commands.sidekick_send_visual(nil, {
       { path = "/tmp/a.lua", type = "file" },
       { path = "/tmp/folder", type = "directory" },
       { path = "/tmp/b.lua", type = "file" },
     })
-    assert.same({ "/tmp/a.lua", "/tmp/b.lua" }, received)
+    assert.same({ "/tmp/a.lua", "/tmp/folder", "/tmp/b.lua" }, received)
     assert.equals("sidekick_send", spec.opts.window.mappings["<leader>af"])
 
     package.loaded["util.sidekick_files"] = original_sender

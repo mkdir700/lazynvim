@@ -5,13 +5,13 @@ return {
     commands = {
       sidekick_send = function(state)
         local node = state.tree:get_node()
-        local paths = node and node.type == "file" and { node.path } or {}
+        local paths = node and node.path and { node.path } or {}
         require("util.sidekick_files").send(paths)
       end,
       sidekick_send_visual = function(_, nodes)
         local paths = {}
         for _, node in ipairs(nodes or {}) do
-          if node.type == "file" then
+          if node.path then
             paths[#paths + 1] = node.path
           end
         end
