@@ -18,6 +18,11 @@ return {
       },
     },
     picker = {
+      sources = {
+        lsp_references = {
+          auto_confirm = false,
+        },
+      },
       actions = {
         sidekick_send = function(...)
           return require("sidekick.cli.picker.snacks").send(...)
