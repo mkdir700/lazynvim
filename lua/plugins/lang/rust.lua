@@ -20,6 +20,7 @@ return {
     lazy = false,
     init = function()
       rust.setup_check_scheduler()
+      require("util.rust_module").setup()
       vim.g.rustaceanvim = {
         tools = {
           check = { command = "check" },

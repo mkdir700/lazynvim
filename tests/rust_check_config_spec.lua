@@ -11,6 +11,7 @@ describe("Rust automatic check configuration", function()
     vim.g.rustaceanvim = original_rustaceanvim
     package.loaded["config.lang.rust"] = nil
     pcall(vim.api.nvim_del_augroup_by_name, "rust_check_scheduler")
+    pcall(vim.api.nvim_del_augroup_by_name, "rust_module_registration")
   end)
 
   it("lets Neovim schedule checks after saves become idle", function()
@@ -20,6 +21,8 @@ describe("Rust automatic check configuration", function()
     specs[2].init()
 
     local settings = vim.g.rustaceanvim.server.settings["rust-analyzer"]
+    assert.equals(1, vim.fn.exists("#rust_module_registration#BufNewFile"))
+    assert.equals(1, vim.fn.exists("#rust_module_registration#BufWritePost"))
     assert.is_false(settings.checkOnSave)
     assert.are.equal("", settings.check.extraEnv.RUSTC_WRAPPER)
   end)
