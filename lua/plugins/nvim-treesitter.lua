@@ -2,6 +2,9 @@ return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
   event = { "BufReadPre", "BufNewFile" },
+  init = function()
+    require("util.rust_use_group").setup()
+  end,
   keys = {
     {
       "aC",
