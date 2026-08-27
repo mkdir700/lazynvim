@@ -15,12 +15,22 @@ describe("Rust automatic check configuration", function()
 
   it("lets Neovim schedule checks after saves become idle", function()
     local specs = dofile(vim.fn.getcwd() .. "/lua/plugins/lang/rust.lua")
-    assert.are.equal(1, #specs)
+    assert.are.equal(2, #specs)
 
-    specs[1].init()
+    specs[2].init()
 
     local settings = vim.g.rustaceanvim.server.settings["rust-analyzer"]
     assert.is_false(settings.checkOnSave)
     assert.are.equal("", settings.check.extraEnv.RUSTC_WRAPPER)
+  end)
+
+  it("ensures rust-analyzer is installed by Mason", function()
+    local specs = dofile(vim.fn.getcwd() .. "/lua/plugins/lang/rust.lua")
+    local opts = { ensure_installed = { "codelldb" } }
+
+    specs[1].opts(nil, opts)
+    specs[1].opts(nil, opts)
+
+    assert.are.same({ "codelldb", "rust-analyzer" }, opts.ensure_installed)
   end)
 end)
