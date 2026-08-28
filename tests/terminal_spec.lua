@@ -12,6 +12,10 @@ describe("terminal selection", function()
       buf = buf,
       opts = {},
       toggle_calls = 0,
+      show_calls = 0,
+      focus_calls = 0,
+      hide_calls = 0,
+      visible = true,
     }
 
     function terminal:buf_valid()
@@ -19,11 +23,28 @@ describe("terminal selection", function()
     end
 
     function terminal:valid()
-      return true
+      return self.visible
     end
 
     function terminal:toggle()
       self.toggle_calls = self.toggle_calls + 1
+      self.visible = not self.visible
+    end
+
+    function terminal:show()
+      self.show_calls = self.show_calls + 1
+      self.visible = true
+      return self
+    end
+
+    function terminal:focus()
+      self.focus_calls = self.focus_calls + 1
+    end
+
+    function terminal:hide()
+      self.hide_calls = self.hide_calls + 1
+      self.visible = false
+      return self
     end
 
     buffers[#buffers + 1] = buf
@@ -88,8 +109,23 @@ describe("terminal selection", function()
 
     terminal.toggle({ count = 1 })
 
-    assert.are.equal(1, terminal_1.toggle_calls)
+    assert.are.equal(1, terminal_1.focus_calls)
+    assert.are.equal(1, terminal_2.hide_calls)
+    assert.are.equal(0, terminal_1.toggle_calls)
     assert.are.equal(0, terminal_2.toggle_calls)
+    assert.is_true(terminal_1.visible)
+    assert.is_false(terminal_2.visible)
+  end)
+
+  it("hides the current terminal before creating another numbered terminal", function()
+    local terminal = require("util.terminal")
+    local terminal_1 = make_terminal(1)
+
+    terminal.toggle({ count = 2 })
+
+    assert.are.equal(1, terminal_1.hide_calls)
+    assert.is_false(terminal_1.visible)
+    assert.is_true(terminals[2].visible)
   end)
 
   it("remembers the terminal selected by an explicit count", function()
@@ -101,7 +137,55 @@ describe("terminal selection", function()
     terminal.toggle({ count = 2 })
     terminal.toggle()
 
-    assert.are.equal(1, terminal_1.toggle_calls)
-    assert.are.equal(2, terminal_2.toggle_calls)
+    assert.are.equal(1, terminal_1.focus_calls)
+    assert.are.equal(1, terminal_2.focus_calls)
+    assert.are.equal(1, terminal_2.toggle_calls)
+  end)
+
+  it("renders numbered terminal tabs and highlights the current one", function()
+    local terminal = require("util.terminal")
+    local terminal_1 = make_terminal(1)
+    local terminal_2 = make_terminal(2)
+
+    vim.api.nvim_set_current_buf(terminal_2.buf)
+    local winbar = terminal.winbar()
+
+    assert.matches("TERMINALS", winbar, 1, true)
+    assert.matches("TerminalTabInactive# 1", winbar, 1, true)
+    assert.matches("TerminalTabActive# 2", winbar, 1, true)
+    assert.is_true(winbar:find(" 1 ", 1, true) < winbar:find(" 2 ", 1, true))
+    assert.are.equal(0, terminal_1.focus_calls)
+  end)
+
+  it("selects a terminal by its displayed tab index", function()
+    local terminal = require("util.terminal")
+    local terminal_1 = make_terminal(1)
+    local terminal_2 = make_terminal(2)
+
+    assert.is_true(terminal.select(2))
+
+    assert.are.equal(0, terminal_1.focus_calls)
+    assert.are.equal(1, terminal_2.focus_calls)
+    assert.are.equal(1, terminal_1.hide_calls)
+    assert.is_false(terminal_1.visible)
+    assert.is_true(terminal_2.visible)
+  end)
+
+  it("cycles through terminals in numeric order", function()
+    local terminal = require("util.terminal")
+    local terminal_1 = make_terminal(1)
+    local terminal_2 = make_terminal(2)
+
+    vim.api.nvim_set_current_buf(terminal_1.buf)
+    assert.is_true(terminal.cycle(1))
+    assert.are.equal(1, terminal_2.focus_calls)
+    assert.is_false(terminal_1.visible)
+    assert.is_true(terminal_2.visible)
+
+    vim.api.nvim_set_current_buf(terminal_2.buf)
+    assert.is_true(terminal.cycle(1))
+    assert.are.equal(1, terminal_1.focus_calls)
+    assert.is_true(terminal_1.visible)
+    assert.is_false(terminal_2.visible)
   end)
 end)
