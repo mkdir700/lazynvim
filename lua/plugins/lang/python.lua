@@ -12,6 +12,23 @@ return {
     },
   },
   {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        ty = {
+          mason = false,
+          capabilities = {
+            workspace = {
+              didChangeWatchedFiles = {
+                dynamicRegistration = true,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  {
     "roobert/f-string-toggle.nvim",
     event = "BufRead",
     ft = { "python" },

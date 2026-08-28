@@ -17,8 +17,8 @@ vim.g.lazyvim_prettier_needs_config = false
 require("config.neovide")
 
 -- LSP Server to use for Python.
--- Set to "basedpyright" to use basedpyright instead of pyright.
-vim.g.lazyvim_python_lsp = "pyright"
+-- Supported values include "pyright", "basedpyright", and "ty".
+vim.g.lazyvim_python_lsp = "ty"
 -- Set to "ruff_lsp" to use the old LSP implementation version.
 vim.g.lazyvim_python_ruff = "ruff"
 
