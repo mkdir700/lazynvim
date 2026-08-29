@@ -3,7 +3,8 @@ if not vim.g.neovide then
 end
 
 -- Typography and window appearance
-vim.o.guifont = "JetVictor Mono:h14"
+local font_size = vim.fn.hostname() == "omarchy" and 10 or 14
+vim.o.guifont = ("JetVictor Mono:h%d"):format(font_size)
 
 -- Window
 vim.g.neovide_scale_factor = 1.0
