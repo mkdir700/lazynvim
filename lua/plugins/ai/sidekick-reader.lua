@@ -1,4 +1,4 @@
-if vim.env.NVIM_ENABLE_SIDEKICK_READER == "0" then
+if vim.env.NVIM_ENABLE_SIDEKICK_READER ~= "1" then
   return {}
 end
 
