@@ -13,6 +13,11 @@ if not registry or registry == "" then
   registry = vim.fs.joinpath(vim.fn.stdpath("state"), "hajimi")
 end
 
+local function local_proxy_bypass(value)
+  local bypass = "127.0.0.1,localhost"
+  return value and value ~= "" and (value .. "," .. bypass) or bypass
+end
+
 return {
   {
     "mkdir700/sidekick-reader.nvim",
@@ -57,7 +62,11 @@ return {
           "launch",
           "--dangerously-bypass-approvals-and-sandbox",
         },
-        env = { SIDEKICK_READER_REGISTRY_DIR = registry },
+        env = {
+          SIDEKICK_READER_REGISTRY_DIR = registry,
+          NO_PROXY = local_proxy_bypass(vim.env.NO_PROXY),
+          no_proxy = local_proxy_bypass(vim.env.no_proxy),
+        },
       }
     end,
   },
