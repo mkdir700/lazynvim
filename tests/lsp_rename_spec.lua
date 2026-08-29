@@ -43,4 +43,47 @@ describe("LSP rename persistence", function()
     assert.are.same({ "keep_on_disk" }, vim.fn.readfile(temp_dir .. "/unrelated.lua"))
     assert.is_true(vim.bo[unrelated].modified)
   end)
+
+  it("applies annotated rename edits without confirmation", function()
+    local renamed_path = temp_dir .. "/renamed.lua"
+    local renamed_uri = vim.uri_from_fname(renamed_path)
+    local rename = require("util.lsp_rename")
+    local original_confirm = vim.fn.confirm
+    local confirm_calls = 0
+
+    vim.fn.confirm = function(...)
+      confirm_calls = confirm_calls + 1
+      return original_confirm(...)
+    end
+
+    local ok, err = pcall(rename.apply_and_save, {
+      documentChanges = {
+        {
+          textDocument = { uri = renamed_uri, version = 0 },
+          edits = {
+            {
+              range = {
+                start = { line = 0, character = 0 },
+                ["end"] = { line = 0, character = 8 },
+              },
+              newText = "new_name",
+              annotationId = "rename",
+            },
+          },
+        },
+      },
+      changeAnnotations = {
+        rename = {
+          label = "Rename symbol",
+          needsConfirmation = true,
+        },
+      },
+    }, "utf-16")
+
+    vim.fn.confirm = original_confirm
+
+    assert.is_true(ok, err)
+    assert.equals(0, confirm_calls)
+    assert.are.same({ "new_name" }, vim.fn.readfile(renamed_path))
+  end)
 end)

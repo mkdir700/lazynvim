@@ -1,5 +1,11 @@
 local M = {}
 
+local function disable_confirmations(workspace_edit)
+  for _, annotation in pairs(workspace_edit.changeAnnotations or {}) do
+    annotation.needsConfirmation = false
+  end
+end
+
 local function edited_buffers(workspace_edit)
   local buffers = {}
 
@@ -18,6 +24,7 @@ end
 
 function M.apply_and_save(workspace_edit, offset_encoding)
   local buffers = edited_buffers(workspace_edit)
+  disable_confirmations(workspace_edit)
   vim.lsp.util.apply_workspace_edit(workspace_edit, offset_encoding)
 
   for bufnr in pairs(buffers) do
