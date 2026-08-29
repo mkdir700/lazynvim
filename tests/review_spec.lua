@@ -4,7 +4,8 @@ describe("review.nvim", function()
 
     assert.equals("georgeguimaraes/review.nvim", spec[1])
     assert.equals("v*", spec.version)
-    assert.same({ "esmuellert/codediff.nvim", "MunifTanjim/nui.nvim" }, spec.dependencies)
+    assert.same({ "esmuellert/codediff.nvim", version = "v2.49.2" }, spec.dependencies[1])
+    assert.equals("MunifTanjim/nui.nvim", spec.dependencies[2])
     assert.same({ "Review" }, spec.cmd)
     assert.same({}, spec.opts)
 

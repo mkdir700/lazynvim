@@ -2,7 +2,7 @@ return {
   "georgeguimaraes/review.nvim",
   version = "v*",
   dependencies = {
-    "esmuellert/codediff.nvim",
+    { "esmuellert/codediff.nvim", version = "v2.49.2" },
     "MunifTanjim/nui.nvim",
   },
   cmd = { "Review" },
