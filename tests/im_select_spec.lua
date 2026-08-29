@@ -2,19 +2,46 @@ describe("input method switching", function()
   local original_system
   local original_im_select
   local original_defer_fn
+  local original_os_uname
 
   before_each(function()
     original_system = vim.system
     original_im_select = package.loaded["im_select"]
     original_defer_fn = vim.defer_fn
+    original_os_uname = vim.loop.os_uname
+    vim.loop.os_uname = function()
+      return { sysname = "Darwin", release = "", version = "", machine = "arm64" }
+    end
   end)
 
   after_each(function()
     vim.system = original_system
     vim.defer_fn = original_defer_fn
+    vim.loop.os_uname = original_os_uname
     package.loaded["im_select"] = original_im_select
     pcall(vim.api.nvim_del_augroup_by_name, "rime_insert_mode")
     pcall(vim.keymap.del, "i", "vswf")
+  end)
+
+  it("switches to English when entering a normal buffer on Linux", function()
+    local setup_options
+    vim.loop.os_uname = function()
+      return { sysname = "Linux", release = "", version = "", machine = "aarch64" }
+    end
+    package.loaded["im_select"] = {
+      setup = function(options)
+        setup_options = options
+      end,
+    }
+
+    local specs = dofile(vim.fn.getcwd() .. "/lua/plugins/im-select.lua")
+    specs[1].config()
+
+    assert.are.same({
+      default_im_select = "keyboard-us",
+      default_command = "fcitx5-remote",
+      set_default_events = { "InsertLeave", "CmdlineLeave", "VimEnter", "BufEnter", "WinEnter" },
+    }, setup_options)
   end)
 
   it("switches to Rime and removes vswf when typed in insert mode", function()

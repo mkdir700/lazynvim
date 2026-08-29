@@ -38,6 +38,7 @@ return {
         require("im_select").setup({
           default_im_select = "keyboard-us",
           default_command = "fcitx5-remote",
+          set_default_events = { "InsertLeave", "CmdlineLeave", "VimEnter", "BufEnter", "WinEnter" },
         })
       elseif platform == "mac" then
         local desired_input_method
