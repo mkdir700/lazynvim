@@ -3,12 +3,16 @@ describe("OSC 52 clipboard toggle", function()
   local original_option
   local original_osc52
   local original_notify
+  local original_register
+  local original_register_type
 
   before_each(function()
     original_clipboard = vim.g.clipboard
     original_option = vim.opt.clipboard:get()
     original_osc52 = package.loaded["vim.ui.clipboard.osc52"]
     original_notify = vim.notify
+    original_register = vim.fn.getreg('"', 1, true)
+    original_register_type = vim.fn.getregtype('"')
     package.loaded["util.osc52_clipboard"] = nil
   end)
 
@@ -18,6 +22,7 @@ describe("OSC 52 clipboard toggle", function()
     package.loaded["vim.ui.clipboard.osc52"] = original_osc52
     package.loaded["util.osc52_clipboard"] = nil
     vim.notify = original_notify
+    vim.fn.setreg('"', original_register, original_register_type)
     vim.cmd("unlet! g:loaded_clipboard_provider")
     vim.cmd("runtime autoload/provider/clipboard.vim")
   end)
@@ -29,14 +34,16 @@ describe("OSC 52 clipboard toggle", function()
       osc52_copied = lines
     end
     local copy_star = function() end
-    local paste_plus = function() end
-    local paste_star = function() end
+    local osc52_paste_requests = 0
     package.loaded["vim.ui.clipboard.osc52"] = {
       copy = function(register)
         return register == "+" and copy_plus or copy_star
       end,
-      paste = function(register)
-        return register == "+" and paste_plus or paste_star
+      paste = function()
+        return function()
+          osc52_paste_requests = osc52_paste_requests + 1
+          return { { "remote" }, "v" }
+        end
       end,
     }
     vim.g.clipboard = {
@@ -64,11 +71,17 @@ describe("OSC 52 clipboard toggle", function()
     assert.equals("OSC 52", vim.g.clipboard.name)
     assert.equals(copy_plus, vim.g.clipboard.copy["+"])
     assert.equals(copy_star, vim.g.clipboard.copy["*"])
-    assert.equals(paste_plus, vim.g.clipboard.paste["+"])
-    assert.equals(paste_star, vim.g.clipboard.paste["*"])
-    assert.same({ "unnamedplus" }, vim.opt.clipboard:get())
+    assert.same({}, vim.opt.clipboard:get())
+    vim.fn.setreg('"', { "ordinary yank" }, "V")
+    vim.api.nvim_exec_autocmds("TextYankPost", {})
+    assert.same({ "ordinary yank" }, osc52_copied)
+
+    osc52_copied = nil
     vim.fn["provider#clipboard#Call"]("set", { { "remote" }, "v", "+" })
     assert.same({ "remote" }, osc52_copied)
+    vim.fn.setreg('"', { "local" }, "v")
+    assert.same({ { "local" }, "v" }, vim.g.clipboard.paste["+"]())
+    assert.equals(0, osc52_paste_requests)
 
     assert.is_false(clipboard.toggle())
     assert.equals("original", vim.g.clipboard.name)
