@@ -71,11 +71,7 @@ function M.select(filter)
 end
 
 function M.toggle_codex()
-  local State = require("sidekick.cli.state")
-  if #State.get({ attached = true, name = "codex" }) > 0 then
-    return require("sidekick.cli").toggle({ name = "codex", focus = true })
-  end
-  return M.select({ name = "codex" })
+  return require("sidekick.cli").toggle({ name = "codex", focus = true })
 end
 
 function M.close(state)

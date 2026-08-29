@@ -87,6 +87,32 @@ describe("Sidekick sessions", function()
     package.loaded["util.sidekick_sessions"] = original_sessions
   end)
 
+  it("uses Sidekick's lifecycle when toggling Codex", function()
+    local original_cli = package.loaded["sidekick.cli"]
+    local original_state = package.loaded["sidekick.cli.state"]
+    local original_sessions = package.loaded["util.sidekick_sessions"]
+    local toggle_opts
+
+    package.loaded["sidekick.cli"] = {
+      toggle = function(opts)
+        toggle_opts = opts
+      end,
+    }
+    package.loaded["sidekick.cli.state"] = {
+      get = function()
+        error("toggle_codex should not inspect Sidekick's internal state")
+      end,
+    }
+    package.loaded["util.sidekick_sessions"] = nil
+
+    require("util.sidekick_sessions").toggle_codex()
+
+    assert.same({ name = "codex", focus = true }, toggle_opts)
+    package.loaded["sidekick.cli"] = original_cli
+    package.loaded["sidekick.cli.state"] = original_state
+    package.loaded["util.sidekick_sessions"] = original_sessions
+  end)
+
   it("binds ctrl-s to session selection only inside Sidekick", function()
     local plugin = dofile(vim.fn.getcwd() .. "/lua/plugins/ai/sidekick.lua")
     local mapping = plugin.opts.cli.win.keys.select_session
