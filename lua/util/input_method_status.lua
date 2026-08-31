@@ -17,6 +17,10 @@ local function detect_app_id()
     return "com.neovide.neovide"
   end
 
+  if vim.uv.os_uname().sysname == "Linux" then
+    return "fcitx5-rime"
+  end
+
   local terminal_apps = {
     Apple_Terminal = "com.apple.Terminal",
     ["iTerm.app"] = "com.googlecode.iterm2",
@@ -165,7 +169,7 @@ function M.setup(opts)
   state.running = false
   state.last_check = 0
   state.app_id = opts.app_id or detect_app_id()
-  state.status_dir = (opts.status_dir or os.getenv("TMPDIR") or "/tmp"):gsub("/+$", "")
+  state.status_dir = (opts.status_dir or os.getenv("XDG_RUNTIME_DIR") or os.getenv("TMPDIR") or "/tmp"):gsub("/+$", "")
 
   if not state.command then
     return false

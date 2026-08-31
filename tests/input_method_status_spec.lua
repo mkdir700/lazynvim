@@ -93,4 +93,29 @@ describe("input method status", function()
     vim.fn.delete(status_dir .. "/rime-input-method-com.neovide.neovide.status")
     vim.fn.delete(status_dir, "d")
   end)
+
+  it("reads the Linux fcitx5-rime internal mode export", function()
+    local requests = {}
+    local status_dir = vim.fn.tempname()
+    vim.fn.mkdir(status_dir)
+    vim.fn.writefile({ "ascii" }, status_dir .. "/rime-input-method-fcitx5-rime.status")
+    vim.system = function(command, options, callback)
+      requests[#requests + 1] = { command = command, options = options, callback = callback }
+      return {}
+    end
+
+    local status = require("util.input_method_status")
+    assert.is_true(status.setup({
+      command = { "fcitx5-remote", "-n" },
+      status_dir = status_dir,
+    }))
+    requests[1].callback({ code = 0, stdout = "rime\n" })
+    vim.wait(100, function()
+      return status.component() == "EN"
+    end)
+    assert.are.equal("EN", status.component())
+
+    vim.fn.delete(status_dir .. "/rime-input-method-fcitx5-rime.status")
+    vim.fn.delete(status_dir, "d")
+  end)
 end)
