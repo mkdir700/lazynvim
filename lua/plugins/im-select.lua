@@ -36,9 +36,28 @@ return {
         })
       elseif platform == "linux" then
         require("im_select").setup({
-          default_im_select = "keyboard-us",
+          -- Keep Fcitx on Rime. F13/F14 are consumed by the local Rime
+          -- processor to select its internal English/Chinese mode.
+          default_im_select = "rime",
           default_command = "fcitx5-remote",
           set_default_events = { "InsertLeave", "CmdlineLeave", "VimEnter", "BufEnter", "WinEnter" },
+          set_previous_events = {},
+        })
+
+        local group = vim.api.nvim_create_augroup("rime_linux_mode", { clear = true })
+        vim.api.nvim_create_autocmd({ "InsertLeave", "CmdlineLeave", "VimEnter", "BufEnter", "WinEnter" }, {
+          group = group,
+          callback = function()
+            vim.system({ "wtype", "-k", "F13" }, { detach = true })
+          end,
+          desc = "Select Rime internal English mode",
+        })
+        vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter" }, {
+          group = group,
+          callback = function()
+            vim.system({ "wtype", "-k", "F14" }, { detach = true })
+          end,
+          desc = "Select Rime internal Chinese mode",
         })
       elseif platform == "mac" then
         local desired_input_method

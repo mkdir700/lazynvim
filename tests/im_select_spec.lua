@@ -20,11 +20,13 @@ describe("input method switching", function()
     vim.loop.os_uname = original_os_uname
     package.loaded["im_select"] = original_im_select
     pcall(vim.api.nvim_del_augroup_by_name, "rime_insert_mode")
+    pcall(vim.api.nvim_del_augroup_by_name, "rime_linux_mode")
     pcall(vim.keymap.del, "i", "vswf")
   end)
 
-  it("switches to English when entering a normal buffer on Linux", function()
+  it("keeps Rime selected and controls its internal mode on Linux", function()
     local setup_options
+    local commands = {}
     vim.loop.os_uname = function()
       return { sysname = "Linux", release = "", version = "", machine = "aarch64" }
     end
@@ -33,15 +35,31 @@ describe("input method switching", function()
         setup_options = options
       end,
     }
+    vim.system = function(command, _, callback)
+      commands[#commands + 1] = command
+      if callback then
+        callback({ code = 0 })
+      end
+      return {}
+    end
 
     local specs = dofile(vim.fn.getcwd() .. "/lua/plugins/im-select.lua")
     specs[1].config()
 
     assert.are.same({
-      default_im_select = "keyboard-us",
+      default_im_select = "rime",
       default_command = "fcitx5-remote",
       set_default_events = { "InsertLeave", "CmdlineLeave", "VimEnter", "BufEnter", "WinEnter" },
+      set_previous_events = {},
     }, setup_options)
+
+    vim.api.nvim_exec_autocmds("InsertLeave", {})
+    vim.api.nvim_exec_autocmds("InsertEnter", {})
+
+    assert.are.same({
+      { "wtype", "-k", "F13" },
+      { "wtype", "-k", "F14" },
+    }, commands)
   end)
 
   it("switches to Rime and removes vswf when typed in insert mode", function()
